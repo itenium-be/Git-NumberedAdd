@@ -7,6 +7,8 @@ $global:gitStatusNumbers = @{
 	modifiedColor='Yellow';
 	deletedColor='DarkMagenta';
 	renamedColor='Yellow';
+
+	includeNumstat=$true;
 }
 
 
@@ -15,17 +17,40 @@ Set-Alias ga Git-NumberedAdd
 Set-Alias gd Git-NumberedDiff
 Set-Alias grs Git-NumberedReset
 
-# TODO: incorporate git diff --numstat?  +62/-15
 
 # Let's keep things simple and don't do the following:
 # - Keep track of added/reset files and use diff --cached to keep gd working
 # - Staged file can be added again after a grs ('ga -3' !! collides with existing usage)
 
+
 function Invoke-Git {
+	# Exists solely for mocking purposes
 	& git $args
 }
 
-function Parse-GitStatus {
+
+function Add-GitNumstat($allFiles, $staged) {
+	if ($staged) {
+		$numstatResult = Invoke-Git diff --numstat --cached
+	} else {
+		$numstatResult = Invoke-Git diff --numstat
+	}
+
+	$numstatResult | % {
+		$numstat = $_.Trim().Split("`t")
+		$numstat = @{file=$numstat[2];added=$numstat[0];deleted=$numstat[1]}
+		$matchingStatus = $allFiles | Where {$_.staged -eq $staged -and $numstat.file -eq $_.file}
+
+		$matchingStatus.added = $numstat.added
+		$matchingStatus.deleted = $numstat.deleted
+	}
+}
+
+
+function Parse-GitStatus($includeNumstat = $false) {
+	$hasStaged = $false
+	$hasWorkingDir = $false
+
 	$allFiles = Invoke-Git status -s | % {
 		$file = $_.Substring(3)
 
@@ -33,11 +58,13 @@ function Parse-GitStatus {
 
 		$staged = $_[0] -ne " " -and $_[0] -ne "?"
 		if ($staged) {
-			$returns + @{state=$_[0];file=$file;staged=$true}
+			$hasStaged = $true
+			$returns += @{state=$_[0];file=$file;staged=$true}
 		}
 
 		$workingDir = $_[1] -ne " "
 		if ($workingDir) {
+			$hasWorkingDir = $true
 			$state = If ($_[1] -eq "?") {"A"} Else {$_[1]}
 			$returns += @{state=$state;file=$file;staged=$false}
 		}
@@ -45,20 +72,53 @@ function Parse-GitStatus {
 
 	} | % {$_}
 
+
+	# Include +/- lines for all files
+	if ($includeNumstat) {
+		if ($hasWorkingDir) {
+			Add-GitNumstat $allFiles $false
+		}
+
+		if ($hasStaged) {
+			Add-GitNumstat $allFiles $true
+		}
+	}
+
 	return $allFiles
 }
 
 
-function Git-NumberedStatus($includeNumstat = $false) {
-	$allFiles = Parse-GitStatus
+function Get-FileInfoFormat($maxAdded, $maxDeleted, $fileInfo) {
+	if ($maxAdded -ne $null) {
+		if ($fileInfo.added -ne $null) {
+			return "{0,3}  {1}  {2,$maxAdded} {3,$maxDeleted}  {4}" -f $index,$fileInfo.state,"+$($fileInfo.added)","-$($fileInfo.deleted)",$fileInfo.file
+		} else {
+			return "{0,3}  {1}  {2,$maxAdded} {3,$maxDeleted}  {4}" -f $index,$fileInfo.state,"","",$fileInfo.file
+		}
+
+	} else {
+		return "{0,3}  {1}  {2}" -f $index,$fileInfo.state,$fileInfo.file
+	}
+}
+
+
+function Git-NumberedStatus() {
 	$config = $global:gitStatusNumbers
+	$allFiles = Parse-GitStatus $config.includeNumstat
+
+	if ($config.includeNumstat) {
+		$maxAdded = ($allFiles | ? {$_.added -ne $null} | % {$_.added.ToString().Length} |  Measure-Object -Maximum).Maximum + 1
+		$maxDeleted = ($allFiles | ? {$_.deleted -ne $null} | % {$_.deleted.ToString().Length} |  Measure-Object -Maximum).Maximum + 1
+	}
 
 	$config.stagingArea = $allFiles | Where staged
 	if ($config.stagingArea.length) {
 		Write-Host "Staged files:"
 		$config.stagingArea | % {$index = -1}{
 			$index++
-			Write-Host "$index   $($_.state) $($_.file)" -ForegroundColor $config.stagedColor
+
+			$output = Get-FileInfoFormat $maxAdded $maxDeleted $_
+			Write-Host $output -ForegroundColor $config.stagedColor
 		}
 		Write-Host ""
 	}
@@ -78,7 +138,8 @@ function Git-NumberedStatus($includeNumstat = $false) {
 				default {'White'}
 			}
 
-			Write-Host "$index   $($_.state) $($_.file)" -ForegroundColor $color
+			$output = Get-FileInfoFormat $maxAdded $maxDeleted $_
+			Write-Host $output -ForegroundColor $color
 		}
 	}
 }
