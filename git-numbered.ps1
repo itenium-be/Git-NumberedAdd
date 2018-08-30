@@ -198,8 +198,4 @@ function Git-NumberedReset {
 
 	$toReset = $fileInfos | % {$_.file}
 	git reset HEAD $toReset
-
-	# foreach ($info in $fileInfos) {
-	# 	git reset HEAD -- $info.file
-	# }
 }

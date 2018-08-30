@@ -42,9 +42,6 @@ Git-NumberedAdd +3
 Git-NumberedAdd -3 5 6 8-9
 ```
 
-
-
-
 ## Running Tests
 
 ```powershell
@@ -53,3 +50,11 @@ Install-Module PestWatch
 
 Invoke-PesterWatcher
 ```
+
+
+## The Future
+
+Some things that could still be implemented:
+
+- Git-NumberedDiff: Should also work for already staged files
+- Git-NumberedAdd & Reset: Should be possible to first Add and then Reset a file by using the same index?
