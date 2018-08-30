@@ -1,7 +1,11 @@
 . $PSScriptRoot\git-numbered.ps1
 
 $global:gitStatusNumbers = @{
-	stagingArea=$null;
+	stagingArea=@(
+		@{state="M";file="staged0";staged=$true};
+		@{state="M";file="staged1";staged=$true};
+		@{state="M";file="staged2";staged=$true};
+	);
 	workingDir=@(
 		@{state="M";file="file0";staged=$false},
 		@{state="M";file="file1";staged=$false},
@@ -88,5 +92,22 @@ Describe 'Parse-GitIndexes' {
 		$fileInfos.Length | Should -Be 2
 		$fileInfos[0].file | Should -Be 'file0'
 		$fileInfos[1].file | Should -Be 'file1'
+	}
+}
+
+
+
+Describe 'Parse-GitIndexes for stagingArea (Git-NumberedReset)' {
+	It 'Gets the fileInfo from the stagingArea array' {
+		$fileInfos = Parse-GitIndexes 1 "stagingArea"
+		$fileInfos.Length | Should -Be 1
+		$fileInfos.file | Should -Be 'staged1'
+	}
+
+	It "Can't return fileInfo that is outside the boundaries" {
+		Mock Write-Host { }
+		$fileInfos = Parse-GitIndexes 5 "stagingArea"
+		$fileInfos.Length | Should -Be 0
+		Assert-MockCalled Write-Host -Times 1
 	}
 }

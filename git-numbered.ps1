@@ -196,16 +196,10 @@ function Git-NumberedReset {
 		return
 	}
 
-	# $toReset = $fileInfos | ? {$_.state -eq 'A'} | % {$_.file}
+	$toReset = $fileInfos | % {$_.file}
+	git reset HEAD $toReset
 
-	# TODO: Cannot reset already staged files now...
-	# Negative indexes for diffing --cached?
-
-	# ($fileInfos | % {$_.file })
-
-	# git reset HEAD -- ($fileInfos | % {$_.file })
-
-	foreach ($info in $fileInfos) {
-		git reset HEAD -- $info.file
-	}
+	# foreach ($info in $fileInfos) {
+	# 	git reset HEAD -- $info.file
+	# }
 }
