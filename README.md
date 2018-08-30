@@ -2,7 +2,7 @@
 
 PowerShell script to git add, diff and reset files with fabricated indexes.
 
-See [the itenium blog for a more detailed explanation](https://itenium.be/blog/???).
+See [the itenium blog for a more detailed explanation](https://itenium.be/blog/productivity/git-numbered-add-for-powershell).
 
 
 Available functions:  
@@ -15,8 +15,8 @@ Git-NumberedStatus # Alias: gs
 Git-NumberedAdd # Alias: ga
 Git-NumberedDiff # Alias: gd
 
-# Alreadt staged files can be
-# git reset HEAD
+# Already staged files can be
+# git reset HEAD with
 Git-NumberedReset # Alias: grs
 ```
 
