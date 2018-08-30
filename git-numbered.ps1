@@ -2,7 +2,7 @@ $global:gitStatusNumbers = @{
 	stagingArea=$null;
 	workingDir=$null;
 
-	stagedColor='green';
+	stagedColor='Green';
 	addedColor='Blue';
 	modifiedColor='Yellow';
 	deletedColor='DarkMagenta';
@@ -21,8 +21,12 @@ Set-Alias grs Git-NumberedReset
 # - Keep track of added/reset files and use diff --cached to keep gd working
 # - Staged file can be added again after a grs ('ga -3' !! collides with existing usage)
 
-function Git-NumberedStatus() {
-	$allFiles = git status -s | % {
+function Invoke-Git {
+	& git $args
+}
+
+function Parse-GitStatus {
+	$allFiles = Invoke-Git status -s | % {
 		$file = $_.Substring(3)
 
 		$returns = @()
@@ -41,9 +45,13 @@ function Git-NumberedStatus() {
 
 	} | % {$_}
 
+	return $allFiles
+}
 
+
+function Git-NumberedStatus($includeNumstat = $false) {
+	$allFiles = Parse-GitStatus
 	$config = $global:gitStatusNumbers
-
 
 	$config.stagingArea = $allFiles | Where staged
 	if ($config.stagingArea.length) {
