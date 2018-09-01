@@ -16,6 +16,7 @@ Set-Alias gs Git-NumberedStatus
 Set-Alias ga Git-NumberedAdd
 Set-Alias gd Git-NumberedDiff
 Set-Alias grs Git-NumberedReset
+Set-Alias gn Git-GetFileNameByIndex
 
 
 # Let's keep things simple and don't do the following:
@@ -26,6 +27,11 @@ Set-Alias grs Git-NumberedReset
 function Invoke-Git {
 	# Exists solely for mocking purposes
 	& git $args
+}
+
+
+function Git-GetFileNameByIndex($index) {
+	return $global:gitStatusNumbers.workingDir[$index].file
 }
 
 

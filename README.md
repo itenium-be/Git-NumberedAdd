@@ -18,6 +18,11 @@ Git-NumberedDiff # Alias: gd
 # Already staged files can be
 # git reset HEAD with
 Git-NumberedReset # Alias: grs
+
+# Get a filename by index
+Git-GetFileNameByIndex 5 # Alias: gn
+# Deleting a file by index
+rm (gn 2)
 ```
 
 Accepted argument values:  
