@@ -18,4 +18,38 @@ Describe 'Parse-GitStatus - with Numstat' {
 		$result.added | Should -Be 5
 		$result.deleted | Should -Be 3
 	}
+
+	It 'numstat works for binary files' {
+		Mock Invoke-Git {
+			if ([string]$args -eq "status -s") {
+				" M file0"
+			} else {
+				# git diff --numstat
+				"`t-`t-`tfile0"
+			}
+		}
+
+		$result = Parse-GitStatus $true
+
+		$result.Length | Should -Be 1
+		$result.file | Should -Be file0
+		$result.added | Should -Be "-"
+		$result.deleted | Should -Be "-"
+	}
+
+	It 'ignores warnings' {
+		Mock Invoke-Git {
+			if ([string]$args -eq "status -s") {
+				" M file0"
+			} else {
+				# git diff --numstat
+				" warning: LF will be replaced by CRLF in ..."
+			}
+		}
+
+		$result = Parse-GitStatus $true
+
+		# No crash = good
+		$result.Length | Should -Be 1
+	}
 }

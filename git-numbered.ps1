@@ -47,8 +47,10 @@ function Add-GitNumstat($allFiles, $staged) {
 		$numstat = @{file=$numstat[2];added=$numstat[0];deleted=$numstat[1]}
 		$matchingStatus = $allFiles | Where {$_.staged -eq $staged -and $numstat.file -eq $_.file}
 
-		$matchingStatus.added = $numstat.added
-		$matchingStatus.deleted = $numstat.deleted
+		if ($matchingStatus) {
+			$matchingStatus.added = $numstat.added
+			$matchingStatus.deleted = $numstat.deleted
+		}
 	}
 }
 
