@@ -63,3 +63,4 @@ Some things that could still be implemented:
 
 - Git-NumberedDiff: Should also work for already staged files
 - Git-NumberedAdd & Reset: Should be possible to first Add and then Reset a file by using the same index?
+- Could also be implemented for `git assumed` and `git log` etc.
