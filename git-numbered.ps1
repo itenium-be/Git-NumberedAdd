@@ -59,7 +59,7 @@ function Parse-GitStatus($includeNumstat = $false) {
 	$hasStaged = $false
 	$hasWorkingDir = $false
 
-	$allFiles = Invoke-Git status -s | % {
+	$allFiles = Invoke-Git status --porcelain | % {
 		$file = $_.Substring(3)
 
 		$returns = @()
@@ -108,7 +108,6 @@ function Get-FileInfoFormat($maxAdded, $maxDeleted, $fileInfo) {
 		return "{0,3}  {1}  {2}" -f $index,$fileInfo.state,$fileInfo.file
 	}
 }
-
 
 function Git-NumberedStatus() {
 	$config = $global:gitStatusNumbers

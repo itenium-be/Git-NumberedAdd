@@ -3,7 +3,7 @@
 Describe 'Parse-GitStatus - with Numstat' {
 	It 'Adds git diff --numstat to the output' {
 		Mock Invoke-Git {
-			if ([string]$args -eq "status -s") {
+			if (([string]$args).StartsWith("status")) {
 				" M file0"
 			} else {
 				# git diff --numstat
@@ -21,7 +21,7 @@ Describe 'Parse-GitStatus - with Numstat' {
 
 	It 'numstat works for binary files' {
 		Mock Invoke-Git {
-			if ([string]$args -eq "status -s") {
+			if (([string]$args).StartsWith("status")) {
 				" M file0"
 			} else {
 				# git diff --numstat
@@ -39,7 +39,7 @@ Describe 'Parse-GitStatus - with Numstat' {
 
 	It 'ignores warnings' {
 		Mock Invoke-Git {
-			if ([string]$args -eq "status -s") {
+			if (([string]$args).StartsWith("status")) {
 				" M file0"
 			} else {
 				# git diff --numstat
