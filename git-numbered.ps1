@@ -163,6 +163,8 @@ function Validate-GitIndexes($indexes) {
 		Write-Host "Add the first file: 'Git-NumberedAdd 0'"
 		Write-Host "Add the first 3 files: 'Git-NumberedAdd 0 1 2' or 'Git-NumberedAdd 0-2' or 'Git-NumberedAdd -3' or 'Git-NumberedAdd 012'"
 		Write-Host "Add all files starting from 2: 'Git-NumberedAdd +1'"
+		Write-Host
+		Write-Host "A tutorial: https://itenium.be/blog/productivity/git-numbered-add-for-powershell"
 		return $false
 	}
 

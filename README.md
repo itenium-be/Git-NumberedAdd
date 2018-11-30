@@ -10,6 +10,7 @@ Available functions:
 # Start with
 Git-NumberedStatus # Alias: gs
 # to see the git status -s with added indexes
+# Use `gs -u` to see all added files in new directories
 
 # And continue with
 Git-NumberedAdd # Alias: ga
@@ -66,3 +67,4 @@ Some things that could still be implemented:
 - Git-NumberedDiff: Should also work for already staged files
 - Git-NumberedAdd & Reset: Should be possible to first Add and then Reset a file by using the same index?
 - Could also be implemented for `git assumed` and `git log` etc.
+- Git-NumberedAdd should allow args like --word-diff?
