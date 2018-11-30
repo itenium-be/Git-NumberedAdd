@@ -57,6 +57,8 @@ Install-Module PestWatch
 Invoke-PesterWatcher
 ```
 
+[wiki/Should](https://github.com/pester/Pester/wiki/Should)
+
 
 ## The Future
 
