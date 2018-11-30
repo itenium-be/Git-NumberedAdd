@@ -2,6 +2,14 @@
 
 
 Describe 'Parse-GitStatus' {
+	It 'Passes extra CLI arguments along to git status' {
+		Mock Invoke-Git {
+			[string]$args | Should -BeLike "* -u"
+		}
+
+		$result = Parse-GitStatus $false "-u"
+	}
+
 	It 'Parses a single modified file in working directory' {
 		Mock Invoke-Git { " M file0" }
 		$result = Parse-GitStatus

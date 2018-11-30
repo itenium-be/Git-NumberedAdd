@@ -55,11 +55,11 @@ function Add-GitNumstat($allFiles, $staged) {
 }
 
 
-function Parse-GitStatus($includeNumstat = $false) {
+function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 	$hasStaged = $false
 	$hasWorkingDir = $false
 
-	$allFiles = Invoke-Git status --porcelain | % {
+	$allFiles = Invoke-Git status --porcelain $extraArgs | % {
 		$file = $_.Substring(3)
 
 		$returns = @()
@@ -111,7 +111,7 @@ function Get-FileInfoFormat($maxAdded, $maxDeleted, $fileInfo) {
 
 function Git-NumberedStatus() {
 	$config = $global:gitStatusNumbers
-	$allFiles = Parse-GitStatus $config.includeNumstat
+	$allFiles = Parse-GitStatus $config.includeNumstat ($args -Join " ")
 
 	if ($config.includeNumstat) {
 		$maxAdded = ($allFiles | ? {$_.added -ne $null} | % {$_.added.ToString().Length} |  Measure-Object -Maximum).Maximum + 1
