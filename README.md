@@ -64,6 +64,7 @@ Invoke-PesterWatcher
 
 Some things that could still be implemented:
 
+- Should take the current path (if not git repo root) into account
 - Git-NumberedCheckout
 - Git-NumberedChangeLocation (ie cd into dir)
 - Git-NumberedDiff: Should also work for already staged files
