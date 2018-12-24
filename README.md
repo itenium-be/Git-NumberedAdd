@@ -64,6 +64,7 @@ Invoke-PesterWatcher
 
 Some things that could still be implemented:
 
+- `warning: LF will be replaced by CRLF`: Show in a better way (ex: "  0  M       fileName (LF -> CRLF)")
 - Should take the current path (if not git repo root) into account
 - Git-NumberedCheckout
 - Git-NumberedChangeLocation (ie cd into dir)
