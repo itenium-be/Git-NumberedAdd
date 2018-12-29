@@ -57,6 +57,8 @@ Install-Module PestWatch
 Invoke-PesterWatcher
 ```
 
+Use `Write-Host` to log something inside a test.
+
 [wiki/Should](https://github.com/pester/Pester/wiki/Should)
 
 
