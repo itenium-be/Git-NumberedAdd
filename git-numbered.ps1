@@ -153,7 +153,7 @@ function Git-NumberedStatus() {
 
 
 function Validate-GitIndexes($indexes) {
-	if (-not $global:gitStatusNumbers.workingDir) {
+	if (-not $global:gitStatusNumbers.workingDir -and -not $global:gitStatusNumbers.stagingArea) {
 		Write-Host "First run Git-NumberedStatus"
 		return $false
 	}
