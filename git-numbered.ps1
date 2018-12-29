@@ -181,6 +181,10 @@ function Parse-GitIndexes($argIndexes, $lookIn = "workingDir") {
 		'workingDir' {$global:gitStatusNumbers.workingDir; break}
 		'stagingArea' {$global:gitStatusNumbers.stagingArea; break}
 	}
+	if ($allFiles.length -eq 1) {
+		$allFiles = @($allFiles)
+	}
+
 
 
 	if ($allFiles.length -lt 10 `
