@@ -3,7 +3,7 @@ function Git-NumberedDiff {
 		$args = @("0-$($global:gitStatusNumbers.workingDir.length - 1)")
 	}
 
-	$fileInfos = Parse-GitIndexes $args
+	$fileInfos = Parse-GitIndexes $args 'workingDir'
 	if (-not $fileInfos) {
 		return
 	}
@@ -19,4 +19,19 @@ function Git-NumberedDiff {
 	# Filter deleted files from diff (git doesn't like it)
 	$files = $fileInfos | ? {$_.state -ne 'D'} | % {$_.file}
 	git diff $files
+}
+
+
+function Git-NumberedDiffCached {
+	if ($args.length -eq 0 -or $args[0] -eq $null) {
+		$args = @("0-$($global:gitStatusNumbers.stagingArea.length - 1)")
+	}
+
+	$fileInfos = Parse-GitIndexes $args 'stagingArea'
+	if (-not $fileInfos) {
+		return
+	}
+
+	$files = $fileInfos | % {$_.file}
+	git diff --cached $files
 }

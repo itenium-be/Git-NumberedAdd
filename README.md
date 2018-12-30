@@ -66,11 +66,10 @@ Use `Write-Host` to log something inside a test.
 
 Some things that could still be implemented:
 
-- `warning: LF will be replaced by CRLF`: Show in a better way (ex: "  0  M       fileName (LF -> CRLF)")
 - Should take the current path (if not git repo root) into account
-- Git-NumberedCheckout
-- Git-NumberedChangeLocation (ie cd into dir)
+
+- `warning: LF will be replaced by CRLF`: Show in a better way (ex: "  0  M       fileName (LF -> CRLF)")
+- Git-NumberedUnassume: first list all assumed files, then allow to unassume by index
 - Git-NumberedDiff: Should also work for already staged files
-- Git-NumberedAdd & Reset: Should be possible to first Add and then Reset a file by using the same index?
-- Could also be implemented for `git assumed` and `git log` etc.
-- Git-NumberedAdd should allow args like --word-diff?
+- Git-NumberedReset: Should also work for not staged files that are then Git-NumberedAdded
+- Git-NumberedAdd/Diff should allow args like -p / --word-diff: ga -p / gdc / gdw / gdcw ?
