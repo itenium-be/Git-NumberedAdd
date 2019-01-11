@@ -14,7 +14,7 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 
 	# Start a git root
 	# full-path = pwd + file
-	# relative-gitroot = file
+	# gitroot-path = file
 	# relative-path = (pwd - gitroot) + file
 
 	# ATTN: git status --porcelain returns paths relative from the repository root folder
@@ -29,7 +29,7 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 		$displayPath = switch($global:gitStatusNumbers.displayFilesAs) {
 			'full-path' {$fullPath}
 			'relative-path' {$gitRootPath}
-			'relative-gitroot' {$gitRootPath}
+			'gitroot-path' {$gitRootPath}
 		}
 
 		# Write-Host ";displayPath=$displayPath"

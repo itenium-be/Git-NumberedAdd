@@ -45,8 +45,8 @@ Describe 'Parse-GitStatus - with $global:gitStatusNumbers.displayFilesAs' {
 	# }
 
 
-	# It 'with "relative-gitroot"' {
-	# 	$global:gitStatusNumbers.displayFilesAs = 'relative-gitroot'
+	# It 'with "gitroot-path"' {
+	# 	$global:gitStatusNumbers.displayFilesAs = 'gitroot-path'
 
 	# 	try {
 	# 		$result = Parse-GitStatus $true

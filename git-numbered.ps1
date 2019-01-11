@@ -11,8 +11,8 @@ $global:gitStatusNumbers = @{
 	renamedColor='Yellow';
 
 	includeNumstat=$true;
-	# displayFilesAs='relative-gitroot'; # full-path | relative-path | relative-gitroot
-	displayFilesAs='full-path'; # full-path | relative-path | relative-gitroot
+	# displayFilesAs='gitroot-path'; # full-path | relative-path | gitroot-path
+	displayFilesAs='full-path'; # full-path | relative-path | gitroot-path
 }
 
 

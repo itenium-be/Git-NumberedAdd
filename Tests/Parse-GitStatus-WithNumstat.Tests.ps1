@@ -7,7 +7,7 @@ Describe 'Parse-GitStatus - with Numstat' {
 	New-Item $file0
 	New-Item $file1
 
-	$global:gitStatusNumbers.displayFilesAs = 'relative-gitroot'
+	$global:gitStatusNumbers.displayFilesAs = 'gitroot-path'
 
 	# BeforeEach {
 	# 	Push-Location "TestDrive:"

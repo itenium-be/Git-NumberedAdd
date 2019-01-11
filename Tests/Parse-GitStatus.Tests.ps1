@@ -8,7 +8,7 @@ Describe 'Parse-GitStatus' {
 	New-Item $file0
 	New-Item $file1
 
-	$global:gitStatusNumbers.displayFilesAs = 'relative-gitroot'
+	$global:gitStatusNumbers.displayFilesAs = 'gitroot-path'
 
 	It 'Passes extra CLI arguments along to git status' {
 		Mock Invoke-Git {
