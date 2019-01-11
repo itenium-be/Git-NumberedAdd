@@ -3,12 +3,9 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 	$hasWorkingDir = $false
 
 	$workingDir = Get-Location
+	$gitRootdir = Get-GitRootLocation
 	# write-host "workingDir=$workingDir"
-
-	Push-GitRootLocation
-	$gitRootdir = Get-Location
 	# write-host "gitRootdir=$gitRootdir"
-	Pop-GitRootLocation
 
 	# ATTN: git status --porcelain returns paths relative from the repository root folder
 	#       git status -s *could* change in the future but returns paths relative to pwd.

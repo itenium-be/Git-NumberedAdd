@@ -3,10 +3,6 @@ function Invoke-Git {
 	& git $args
 }
 
-function Push-GitRootLocation {
-	Push-Location (git rev-parse --show-toplevel)
-}
-
-function Pop-GitRootLocation {
-	Pop-Location
+function Get-GitRootLocation {
+	git rev-parse --show-toplevel
 }
