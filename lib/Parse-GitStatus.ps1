@@ -2,26 +2,58 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 	$hasStaged = $false
 	$hasWorkingDir = $false
 
-	$allFiles = Invoke-Git status --porcelain $extraArgs | % {
-		$file = $_.Substring(3)
+	$workingDir = (Get-Location).FullName
+
+	Push-GitRootLocation
+	$gitRootdir = (Get-Location).FullName
+
+
+	# Pop-GitRootLocation
+
+	# Resolve-Path -Relative $file
+
+	# Start a git root
+	# full-path = pwd + file
+	# relative-gitroot = file
+	# relative-path = (pwd - gitroot) + file
+
+	# ATTN: git status --porcelain returns paths relative from the repository root folder
+	#       git status -s *could* change in the future but returns paths relative to pwd.
+	$allFiles = Invoke-Git status -s $extraArgs | % {
+		$gitRootPath = $_.Substring(3)
+		$fullPath = Join-Path $pwd $gitRootPath
+		# $file = Resolve-Path $file
+
+		# TODO: Can't use Resolve-Path: we can't do this with deleted files!
+
+		$displayPath = switch($global:gitStatusNumbers.displayFilesAs) {
+			'full-path' {$fullPath}
+			'relative-path' {$gitRootPath}
+			'relative-gitroot' {$gitRootPath}
+		}
+
+		# Write-Host ";displayPath=$displayPath"
 
 		$returns = @()
 
 		$staged = $_[0] -ne " " -and $_[0] -ne "?"
 		if ($staged) {
 			$hasStaged = $true
-			$returns += @{state=$_[0];file=$file;staged=$true}
+			# TODO: hier --> save fullPath & relative paths..?
+			$returns += @{state=$_[0];file=$gitRootPath;staged=$true;displayPath=$displayPath}
 		}
 
 		$workingDir = $_[1] -ne " "
 		if ($workingDir) {
 			$hasWorkingDir = $true
 			$state = If ($_[1] -eq "?") {"A"} Else {$_[1]}
-			$returns += @{state=$state;file=$file;staged=$false}
+			$returns += @{state=$state;file=$gitRootPath;staged=$false;displayPath=$displayPath}
 		}
 		return $returns
 
 	} | % {$_}
+
+	Pop-GitRootLocation
 
 
 	# Include +/- lines for all files

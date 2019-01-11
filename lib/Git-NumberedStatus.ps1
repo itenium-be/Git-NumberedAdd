@@ -3,8 +3,8 @@ function Git-NumberedStatus() {
 	$allFiles = Parse-GitStatus $config.includeNumstat ($args -Join " ")
 
 	if ($config.includeNumstat) {
-		$maxAdded = ($allFiles | ? {$_.added -ne $null} | % {$_.added.ToString().Length} |  Measure-Object -Maximum).Maximum + 1
-		$maxDeleted = ($allFiles | ? {$_.deleted -ne $null} | % {$_.deleted.ToString().Length} |  Measure-Object -Maximum).Maximum + 1
+		$maxAdded = ($allFiles | ? {$_.added -ne $null} | % {$_.added.ToString().Length} | Measure-Object -Maximum).Maximum + 1
+		$maxDeleted = ($allFiles | ? {$_.deleted -ne $null} | % {$_.deleted.ToString().Length} | Measure-Object -Maximum).Maximum + 1
 	}
 
 	$config.stagingArea = $allFiles | Where staged
@@ -43,14 +43,15 @@ function Git-NumberedStatus() {
 
 
 function Get-FileInfoFormat($maxAdded, $maxDeleted, $fileInfo) {
+	$file = $fileInfo.displayPath
 	if ($maxAdded -ne $null) {
 		if ($fileInfo.added -ne $null) {
-			return "{0,3}  {1}  {2,$maxAdded} {3,$maxDeleted}  {4}" -f $index,$fileInfo.state,"+$($fileInfo.added)","-$($fileInfo.deleted)",$fileInfo.file
+			return "{0,3}  {1}  {2,$maxAdded} {3,$maxDeleted}  {4}" -f $index,$fileInfo.state,"+$($fileInfo.added)","-$($fileInfo.deleted)",$file
 		} else {
-			return "{0,3}  {1}  {2,$maxAdded} {3,$maxDeleted}  {4}" -f $index,$fileInfo.state,"","",$fileInfo.file
+			return "{0,3}  {1}  {2,$maxAdded} {3,$maxDeleted}  {4}" -f $index,$fileInfo.state,"","",$file
 		}
 
 	} else {
-		return "{0,3}  {1}  {2}" -f $index,$fileInfo.state,$fileInfo.file
+		return "{0,3}  {1}  {2}" -f $index,$fileInfo.state,$file
 	}
 }

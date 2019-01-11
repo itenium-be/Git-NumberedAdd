@@ -62,14 +62,7 @@ Use `Write-Host` to log something inside a test.
 [wiki/Should](https://github.com/pester/Pester/wiki/Should)
 
 
-## The Future
 
-Some things that could still be implemented:
 
 - Should take the current path (if not git repo root) into account
 
-- `warning: LF will be replaced by CRLF`: Show in a better way (ex: "  0  M       fileName (LF -> CRLF)")
-- Git-NumberedUnassume: first list all assumed files, then allow to unassume by index
-- Git-NumberedDiff: Should also work for already staged files
-- Git-NumberedReset: Should also work for not staged files that are then Git-NumberedAdded
-- Git-NumberedAdd/Diff should allow args like -p / --word-diff: ga -p / gdc / gdw / gdcw ?

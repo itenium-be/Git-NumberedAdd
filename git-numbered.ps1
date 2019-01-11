@@ -1,4 +1,6 @@
 $global:gitStatusNumbers = @{
+	# @{state=A/M/D/R;file=$fullPath;staged=$true/$false;displayPath=$displayFilesAs}
+	# state: A(dded) / M(odified) / D(eleted) / R(enamed)
 	stagingArea=$null;
 	workingDir=$null;
 
@@ -9,6 +11,8 @@ $global:gitStatusNumbers = @{
 	renamedColor='Yellow';
 
 	includeNumstat=$true;
+	# displayFilesAs='relative-gitroot'; # full-path | relative-path | relative-gitroot
+	displayFilesAs='full-path'; # full-path | relative-path | relative-gitroot
 }
 
 
