@@ -10,14 +10,14 @@ function Git-NumberedDiff {
 
 	# git add -N, --intent-to-add
 	# so that new files are shown in the diff
-	$newFiles = $fileInfos | ? {$_.state -eq 'A'} | % {$_.file}
+	$newFiles = $fileInfos | ? {$_.state -eq 'A'} | % {$_.fullPath}
 	if ($newFiles) {
 		Write-Host "git add --intent-to-add $newFiles"
 		git add -Nv $newFiles
 	}
 
 	# Filter deleted files from diff (git doesn't like it)
-	$files = $fileInfos | ? {$_.state -ne 'D'} | % {$_.file}
+	$files = $fileInfos | ? {$_.state -ne 'D'} | % {$_.fullPath}
 	git diff $files
 }
 
@@ -32,6 +32,6 @@ function Git-NumberedDiffCached {
 		return
 	}
 
-	$files = $fileInfos | % {$_.file}
+	$files = $fileInfos | % {$_.fullPath}
 	git diff --cached $files
 }

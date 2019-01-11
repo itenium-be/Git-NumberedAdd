@@ -8,8 +8,6 @@ Describe 'Parse-GitStatus' {
 	New-Item $file0
 	New-Item $file1
 
-	$global:gitStatusNumbers.displayFilesAs = 'gitroot-path'
-
 	It 'Passes extra CLI arguments along to git status' {
 		Mock Invoke-Git {
 			[string]$args | Should -BeLike "* -u"
@@ -23,7 +21,7 @@ Describe 'Parse-GitStatus' {
 		Mock Invoke-Git { " M $file0" }
 		$result = Parse-GitStatus
 		$result.Length | Should -Be 1
-		$result.displayPath | Should -Be $file0
+		$result.file | Should -Be $file0
 		$result.staged | Should -Be $false
 		$result.state | Should -Be M
 	}
@@ -32,7 +30,7 @@ Describe 'Parse-GitStatus' {
 		Mock Invoke-Git { "?? $file0" }
 		$result = Parse-GitStatus
 		$result.Length | Should -Be 1
-		$result.displayPath | Should -Be $file0
+		$result.file | Should -Be $file0
 		$result.staged | Should -Be $false
 		$result.state | Should -Be A
 	}
@@ -41,7 +39,7 @@ Describe 'Parse-GitStatus' {
 		Mock Invoke-Git { "M  $file0" }
 		$result = Parse-GitStatus
 		$result.Length | Should -Be 1
-		$result.displayPath | Should -Be $file0
+		$result.file | Should -Be $file0
 		$result.staged | Should -Be $true
 		$result.state | Should -Be M
 	}
@@ -50,7 +48,7 @@ Describe 'Parse-GitStatus' {
 		Mock Invoke-Git { "A  $file0" }
 		$result = Parse-GitStatus
 		$result.Length | Should -Be 1
-		$result.displayPath | Should -Be $file0
+		$result.file | Should -Be $file0
 		$result.staged | Should -Be $true
 		$result.state | Should -Be A
 	}
@@ -61,11 +59,11 @@ Describe 'Parse-GitStatus' {
 
 		$result.Length | Should -Be 2
 
-		$result[0].displayPath | Should -Be $file0
+		$result[0].file | Should -Be $file0
 		$result[0].staged | Should -Be $true
 		$result[0].state | Should -Be M
 
-		$result[1].displayPath | Should -Be $file0
+		$result[1].file | Should -Be $file0
 		$result[1].staged | Should -Be $false
 		$result[1].state | Should -Be M
 	}
@@ -76,11 +74,11 @@ Describe 'Parse-GitStatus' {
 
 		$result.Length | Should -Be 2
 
-		$result[0].displayPath | Should -Be $file0
+		$result[0].file | Should -Be $file0
 		$result[0].staged | Should -Be $true
 		$result[0].state | Should -Be M
 
-		$result[1].displayPath | Should -Be $file1
+		$result[1].file | Should -Be $file1
 		$result[1].staged | Should -Be $false
 		$result[1].state | Should -Be D
 	}

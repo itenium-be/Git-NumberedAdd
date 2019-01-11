@@ -43,7 +43,12 @@ function Git-NumberedStatus() {
 
 
 function Get-FileInfoFormat($maxAdded, $maxDeleted, $fileInfo) {
-	$file = $fileInfo.displayPath
+	$file = switch($global:gitStatusNumbers.displayFilesAs) {
+		'full-path' {$fileInfo.fullPath}
+		'relative-path' {$fileInfo.relativePath}
+		'gitroot-path' {$fileInfo.file}
+	}
+
 	if ($maxAdded -ne $null) {
 		if ($fileInfo.added -ne $null) {
 			return "{0,3}  {1}  {2,$maxAdded} {3,$maxDeleted}  {4}" -f $index,$fileInfo.state,"+$($fileInfo.added)","-$($fileInfo.deleted)",$file

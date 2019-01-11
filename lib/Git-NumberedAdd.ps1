@@ -4,7 +4,7 @@ function Git-NumberedAdd {
 		return
 	}
 
-	$files = $fileInfos | % {$_.file}
+	$files = $fileInfos | % {$_.fullPath}
 	git add $files -v
 }
 
@@ -15,6 +15,6 @@ function Git-NumberedAddPatch {
 		return
 	}
 
-	$files = $fileInfos | % {$_.file}
+	$files = $fileInfos | % {$_.fullPath}
 	git add $files -vp
 }

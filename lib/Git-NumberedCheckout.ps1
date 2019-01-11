@@ -4,6 +4,6 @@ function Git-NumberedCheckout {
 		return
 	}
 
-	$toCheckout = $fileInfos | % {$_.file}
+	$toCheckout = $fileInfos | % {$_.fullPath}
 	git checkout HEAD $toCheckout
 }

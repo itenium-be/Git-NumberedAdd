@@ -4,7 +4,7 @@ function Git-NumberedAssumed {
 		return
 	}
 
-	$files = $fileInfos | % {$_.file}
+	$files = $fileInfos | % {$_.fullPath}
 	git update-index --assume-unchanged $files
 }
 
@@ -17,6 +17,6 @@ function Git-NumberedAssumed {
 # 		return
 # 	}
 
-# 	$files = $fileInfos | % {$_.file}
+# 	$files = $fileInfos | % {$_.fullPath}
 # 	git update-index --no-assume-unchanged $files
 # }

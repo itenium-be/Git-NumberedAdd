@@ -2,58 +2,41 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 	$hasStaged = $false
 	$hasWorkingDir = $false
 
-	$workingDir = (Get-Location).FullName
+	$workingDir = Get-Location
+	# write-host "workingDir=$workingDir"
 
 	Push-GitRootLocation
-	$gitRootdir = (Get-Location).FullName
-
-
-	# Pop-GitRootLocation
-
-	# Resolve-Path -Relative $file
-
-	# Start a git root
-	# full-path = pwd + file
-	# gitroot-path = file
-	# relative-path = (pwd - gitroot) + file
+	$gitRootdir = Get-Location
+	# write-host "gitRootdir=$gitRootdir"
+	Pop-GitRootLocation
 
 	# ATTN: git status --porcelain returns paths relative from the repository root folder
 	#       git status -s *could* change in the future but returns paths relative to pwd.
 	$allFiles = Invoke-Git status -s $extraArgs | % {
-		$gitRootPath = $_.Substring(3)
-		$fullPath = Join-Path $pwd $gitRootPath
-		# $file = Resolve-Path $file
-
-		# TODO: Can't use Resolve-Path: we can't do this with deleted files!
-
-		$displayPath = switch($global:gitStatusNumbers.displayFilesAs) {
-			'full-path' {$fullPath}
-			'relative-path' {$gitRootPath}
-			'gitroot-path' {$gitRootPath}
-		}
-
-		# Write-Host ";displayPath=$displayPath"
+		$relativePath = $_.Substring(3)
+		$fullPath = Join-Path $workingDir $relativePath
+		$fullPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($fullPath)
+		# write-host "RELATIVE=$relativePath     FULL=$fullPath"
+		$gitRootPath = $fullPath.Substring($gitRootdir.ToString().Length + 1)
 
 		$returns = @()
 
 		$staged = $_[0] -ne " " -and $_[0] -ne "?"
 		if ($staged) {
 			$hasStaged = $true
-			# TODO: hier --> save fullPath & relative paths..?
-			$returns += @{state=$_[0];file=$gitRootPath;staged=$true;displayPath=$displayPath}
+			$returns += @{state=$_[0];file=$gitRootPath;staged=$true;fullPath=$fullPath;relativePath=$relativePath}
 		}
 
-		$workingDir = $_[1] -ne " "
-		if ($workingDir) {
+		$isWorkingDir = $_[1] -ne " "
+		if ($isWorkingDir) {
 			$hasWorkingDir = $true
 			$state = If ($_[1] -eq "?") {"A"} Else {$_[1]}
-			$returns += @{state=$state;file=$gitRootPath;staged=$false;displayPath=$displayPath}
+			$returns += @{state=$state;file=$gitRootPath;staged=$false;fullPath=$fullPath;relativePath=$relativePath}
 		}
 		return $returns
 
 	} | % {$_}
 
-	Pop-GitRootLocation
 
 
 	# Include +/- lines for all files

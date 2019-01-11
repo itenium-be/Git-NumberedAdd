@@ -24,27 +24,27 @@ function Parse-GitIndexes($argIndexes, $lookIn = "workingDir") {
 	$indexes = @()
 	foreach ($arg in $argIndexes) {
 		if ($arg -match '^\d+-\d+$') {
-			# Add by range
+			# Add by range (ex: 3-5)
 			$begin = ($arg -split '-')[0]
 			$end = ($arg -split '-')[1]
 			$indexes += $begin..$end
 
 		} elseif ($arg[0] -eq '-' -or $arg[0] -eq '+') {
-			# All before/after
+			# All before/after (ex: -3 or +5)
 			$beginOrStart = [int]$arg.Substring(1)
 
 			if ($arg[0] -eq '-') {
-				# Add all before
+				# Add all before (ex: -3 == 0, 1, 2)
 				$allBefore = $beginOrStart - 1
 				$indexes += 0..$allBefore
 
 			} else {
-				# Add all after
+				# Add all after (ex: +3 == 4, 5, ...)
 				$indexes += ($beginOrStart + 1)..($allFiles.length - 1)
 			}
 
 		} elseif ([int32]::TryParse($arg, [ref]$index)) {
-			# Add by index
+			# Add by index (ex: 3, 15)
 			$indexes += $index
 
 		} else {

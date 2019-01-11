@@ -4,7 +4,7 @@ function Git-NumberedSetLocation {
 		return
 	}
 
-	$path = (get-item $fileInfos.file).Directory.FullName
+	$path = $fileInfos.fullPath
 
 	Push-Location $path
 	# Use Pop-Location (alias: popd) to go back to where you came from

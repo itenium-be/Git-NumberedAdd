@@ -4,6 +4,6 @@ function Git-NumberedReset {
 		return
 	}
 
-	$toReset = $fileInfos | % {$_.file}
+	$toReset = $fileInfos | % {$_.fullPath}
 	git reset HEAD $toReset
 }
