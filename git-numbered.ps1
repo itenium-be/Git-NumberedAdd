@@ -37,7 +37,7 @@ Set-Alias gas Git-NumberedAssumed
 Set-Alias gasl Git-ListAssumed
 Set-Alias gnoas Git-NumberedUnassumed
 
-
+Set-Alias gnh Git-NumberedHelp
 
 ##############################################################################
 #.SYNOPSIS

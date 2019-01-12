@@ -9,7 +9,7 @@ See [the itenium blog for a more detailed explanation](https://itenium.be/blog/p
 
 ```powershell
 # Display all actions with description and alias
-Git-NumberedHelp
+Git-NumberedHelp # alias: gnh
 
 # Start with
 Git-NumberedStatus # Alias: gs
