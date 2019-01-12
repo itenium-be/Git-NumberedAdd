@@ -5,7 +5,7 @@ PowerShell script to git add, diff and reset files with fabricated indexes.
 See [the itenium blog for a more detailed explanation](https://itenium.be/blog/productivity/git-numbered-add-for-powershell).
 
 
-Available functions:  
+**Available functions**:  
 ```powershell
 # Start with
 Git-NumberedStatus # Alias: gs
@@ -40,7 +40,7 @@ Git-NumberedSetLocation # Alias: gsl
 Git-NumberedAssumed # alias: gas
 ```
 
-Accepted argument values:  
+**Accepted argument values**:  
 ```powershell
 # Stage files 0, 1 and 3
 Git-NumberedAdd 0 1 3
