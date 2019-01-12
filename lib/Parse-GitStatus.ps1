@@ -59,31 +59,37 @@ function Add-GitNumstat($allFiles, $staged) {
 		$numstatResult = Invoke-Git diff --numstat 2>&1
 	}
 
-	$numstatResult | % {
-		if ($_.StartsWith(' The file will have its original line')) {
+
+	$eolWarnings = $numstatResult | ? { $_ -is [System.Management.Automation.ErrorRecord] }
+	$eolWarnings | % {
+		$line = $_.Exception.Message
+		if ($line.StartsWith('The file will have its original line')) {
 			# Ignore this one
 
-		} elseif ($_.StartsWith(' warning: ')) {
+		} elseif ($line.StartsWith('warning: ')) {
 			# Add EOL notice
-			$match = $_ | Select-String -Pattern ' warning: (\w+) will be replaced by (\w+) in (.*)'
+			$match = $line | Select-String -Pattern 'warning: (\w+) will be replaced by (\w+) in (.*)\.'
 			$fromEol = $match.matches.groups[1]
 			$toEol = $match.matches.groups[2]
-			$fileName = $match.matches.groups[3]
-			$matchingStatus = $allFiles | Where {$_.staged -eq $staged -and $_.file -eq $fileName}
+			$fileName = $match.matches.groups[3].Value.Replace('/', '\')
+			$matchingStatus = $allFiles | Where {$_.file -eq $fileName}
 			if ($matchingStatus) {
 				$matchingStatus.lineEndings = "$fromEol -> $toEol"
 			}
+		}
+	}
 
-		} else {
-			# Output format: +++ `t --- `t fileName
-			$numstat = $_.Trim().Split("`t")
-			$numstat = @{file=$numstat[2];added=$numstat[0];deleted=$numstat[1]}
-			$matchingStatus = $allFiles | Where {$_.staged -eq $staged -and $numstat.file -eq $_.file}
 
-			if ($matchingStatus) {
-				$matchingStatus.added = $numstat.added
-				$matchingStatus.deleted = $numstat.deleted
-			}
+	$numstatResult = $numstatResult | ? { $_ -isnot [System.Management.Automation.ErrorRecord] }
+	$numstatResult | % {
+		# Output format: +++ `t --- `t fileName
+		$numstat = $_.Trim().Split("`t")
+		$numstat = @{file=$numstat[2];added=$numstat[0];deleted=$numstat[1]}
+		$matchingStatus = $allFiles | Where {$_.staged -eq $staged -and $numstat.file -eq $_.file}
+
+		if ($matchingStatus) {
+			$matchingStatus.added = $numstat.added
+			$matchingStatus.deleted = $numstat.deleted
 		}
 	}
 }

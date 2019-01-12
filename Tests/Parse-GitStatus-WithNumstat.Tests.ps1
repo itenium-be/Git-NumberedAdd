@@ -59,8 +59,8 @@ Describe 'Parse-GitStatus - with Numstat' {
 				" M $file0"
 			} else {
 				# git diff --numstat
-				" warning: LF will be replaced by CRLF in $file0`n"
-				" The file will have its original line endings in your working directory.`n"
+				Write-Error "warning: LF will be replaced by CRLF in $file0."
+				Write-Error "The file will have its original line endings in your working directory."
 				" `t5`t3`t$file0"
 			}
 		}
