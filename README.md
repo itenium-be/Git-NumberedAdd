@@ -14,16 +14,30 @@ Git-NumberedStatus # Alias: gs
 
 # And continue with
 Git-NumberedAdd # Alias: ga
+Git-NumberedAddPatch # Alias: gap
 Git-NumberedDiff # Alias: gd
+Git-NumberedDiffCached # Alias: gdc
+Git-NumberedCheckout # Alias: gco
+
 
 # Already staged files can be
 # git reset HEAD with
 Git-NumberedReset # Alias: grs
 
+
 # Get a filename by index
 Git-GetFileNameByIndex 5 # Alias: gn
 # Deleting a file by index
 rm (gn 2)
+
+
+# Push-Location
+Git-NumberedSetLocation # Alias: gsl
+# Use Pop-Location (alias: popd) to go back to where you came from
+
+
+# git update-index --assume-unchanged
+Git-NumberedAssumed # alias: gas
 ```
 
 Accepted argument values:  
@@ -47,6 +61,23 @@ Git-NumberedAdd +3
 # Combine as you like
 Git-NumberedAdd -3 5 6 8-9
 ```
+
+
+
+## Git-Assuming
+
+Unassume files back again after `Git-NumberedAssumed` (alias: gas)
+
+```powershell
+# List all currently assumed files
+Git-ListAssumed # alias: gasl
+
+# and follow with:
+# git update-index --no-assume-unchanged
+Git-NumberedNoAssumed # alias: gnoas
+```
+
+
 
 ## Running Tests
 

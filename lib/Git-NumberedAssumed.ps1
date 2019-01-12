@@ -9,14 +9,21 @@ function Git-NumberedAssumed {
 }
 
 
+# To NoAssume we need to list the assumed files first
 
-# This would actually need to do numbered display of assumed files...
-# function Git-NumberedNoAssumed {
-# 	$fileInfos = Parse-GitIndexes $args 'workingDir'
-# 	if (-not $fileInfos) {
-# 		return
-# 	}
+$global:assumedFiles = @()
 
-# 	$files = $fileInfos | % {$_.fullPath}
-# 	git update-index --no-assume-unchanged $files
-# }
+function Git-ListAssumed {
+	$files = (git ls-files -v) | Where-Object { $_.StartsWith("h") } | % { $_.Substring(2) }
+	$index = 0
+	$files | % {
+		Write-Host "$index $_"
+		$global:assumedFiles += $_
+		$index++
+	}
+}
+
+function Git-NumberedNoAssumed {
+	$file = $global:assumedFiles[$args]
+	git update-index --no-assume-unchanged $file
+}
