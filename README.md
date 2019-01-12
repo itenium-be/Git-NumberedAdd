@@ -1,6 +1,6 @@
 # Git-NumberedAdd
 
-PowerShell script to git add, diff and reset files with fabricated indexes.
+PowerShell script to git add, diff, reset, etc files with fabricated indexes.
 
 See [the itenium blog for a more detailed explanation](https://itenium.be/blog/productivity/git-numbered-add-for-powershell).
 
