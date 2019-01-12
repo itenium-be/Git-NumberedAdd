@@ -1,3 +1,35 @@
+##############################################################################
+#.SYNOPSIS
+# Display the results of Parse-GitStatus
+#
+#.DESCRIPTION
+# Output looks like:
+# ---------------------
+# Staged files:
+#   0  M file0
+#   1  A file1
+#
+# Working directory:
+#   0  M file0
+# ---------------------
+#
+# Legend
+# '0-1' are the indexes
+# Status codes:
+# - M: Modified
+# - A: Added
+# - D: deleted
+# - R: Renamed
+#
+# Use Git-NumberedHelp for an overview of all actions and utilities
+#
+#.EXAMPLE
+# Git-NumberedStatus
+#
+# And follow with:
+# Git-NumberedAdd -3 5 6 8-10
+# To add the files: 0, 1, 2, 5, 6, 8, 9 and 10
+##############################################################################
 function Git-NumberedStatus() {
 	$config = $global:gitStatusNumbers
 	$allFiles = Parse-GitStatus $config.includeNumstat ($args -Join " ")

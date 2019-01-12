@@ -1,3 +1,7 @@
+##############################################################################
+#.SYNOPSIS
+# `git diff` the indexes passed as $args in the working directory
+##############################################################################
 function Git-NumberedDiff {
 	if ($args.length -eq 0 -or $args[0] -eq $null) {
 		$args = @("0-$($global:gitStatusNumbers.workingDir.length - 1)")
@@ -22,6 +26,10 @@ function Git-NumberedDiff {
 }
 
 
+##############################################################################
+#.SYNOPSIS
+# `git diff --cached` the indexes passed as $args in the working directory
+##############################################################################
 function Git-NumberedDiffCached {
 	if ($args.length -eq 0 -or $args[0] -eq $null) {
 		$args = @("0-$($global:gitStatusNumbers.stagingArea.length - 1)")

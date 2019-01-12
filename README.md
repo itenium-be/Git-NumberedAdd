@@ -74,7 +74,7 @@ Git-ListAssumed # alias: gasl
 
 # and follow with:
 # git update-index --no-assume-unchanged
-Git-NumberedNoAssumed # alias: gnoas
+Git-NumberedUnassumed # alias: gnoas
 ```
 
 

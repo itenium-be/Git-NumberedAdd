@@ -35,4 +35,23 @@ Set-Alias gsl Git-NumberedSetLocation
 ## Assuming
 Set-Alias gas Git-NumberedAssumed
 Set-Alias gasl Git-ListAssumed
-Set-Alias gnoas Git-NumberedNoAssumed
+Set-Alias gnoas Git-NumberedUnassumed
+
+
+
+##############################################################################
+#.SYNOPSIS
+# Displays help for all Git-Numbered actions and utilities
+##############################################################################
+function Git-NumberedHelp() {
+	$table = Get-Command -Name "Git-*" | ? { $_.CommandType -eq 'Function' } | % {
+		$name = $_.name
+		$help = get-help $_ -Full
+		$example = If ($help.Examples) {$true} Else {''}
+		$alias = Get-Alias -Definition $name -ErrorAction SilentlyContinue
+
+		return @{name=$name;description=$help.Synopsis;example=$example;alias=$alias}
+	}
+
+	$table.ForEach({[PSCustomObject]$_}) | Format-Table -AutoSize
+}
