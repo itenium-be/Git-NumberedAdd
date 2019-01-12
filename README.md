@@ -5,8 +5,12 @@ PowerShell script to git add, diff, reset, etc files with fabricated indexes.
 See [the itenium blog for a more detailed explanation](https://itenium.be/blog/productivity/git-numbered-add-for-powershell).
 
 
-**Available functions**:  
+## Available actions
+
 ```powershell
+# Display all actions with description and alias
+Git-NumberedHelp
+
 # Start with
 Git-NumberedStatus # Alias: gs
 # to see the git status -s with added indexes
@@ -40,20 +44,21 @@ Git-NumberedSetLocation # Alias: gsl
 Git-NumberedAssumed # alias: gas
 ```
 
-**Accepted argument values**:  
+## Accepted argument values for matching indexes
+
 ```powershell
 # Stage files 0, 1 and 3
 Git-NumberedAdd 0 1 3
 
 # The spaces are optional, but only when there
 # are less than 10 files in the status report.
-Git-NumberedAdd 013
+Git-NumberedDiff 013
 
-# Stage files 2 to 5 (all inclusive)
-Git-NumberedAdd 2-5
+# Checkout files 2 to 5 (all inclusive)
+Git-NumberedCheckout 2-5
 
-# Stage files 0, 1 and 2
-Git-NumberedAdd -3
+# Display diff for files 0, 1 and 2
+Git-NumberedDiff -3
 
 # Stage all files after (not inclusive)
 Git-NumberedAdd +3
@@ -79,7 +84,7 @@ Git-NumberedUnassumed # alias: gnoas
 
 
 
-## Running Tests
+# Running Tests
 
 ```powershell
 Install-Module -Name Pester -Force -SkipPublisherCheck
@@ -91,9 +96,3 @@ Invoke-PesterWatcher
 Use `Write-Host` to log something inside a test.
 
 [wiki/Should](https://github.com/pester/Pester/wiki/Should)
-
-
-
-
-- Should take the current path (if not git repo root) into account
-
