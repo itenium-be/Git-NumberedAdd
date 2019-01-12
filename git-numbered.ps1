@@ -15,7 +15,7 @@ $global:gitStatusNumbers = @{
 }
 
 
-Get-ChildItem ("$PSScriptRoot\lib\*.ps1") | ForEach-Object {. $_.FullName}
+Get-ChildItem -Recurse ("$PSScriptRoot\lib\*.ps1") | ForEach-Object {. $_.FullName}
 
 
 Set-Alias gs Git-NumberedStatus
@@ -28,11 +28,11 @@ Set-Alias gdc Git-NumberedDiffCached
 Set-Alias grs Git-NumberedReset
 Set-Alias gco Git-NumberedCheckout
 
-# Assuming
-Set-Alias gas Git-NumberedAssumed
-Set-Alias gasl Git-ListAssumed
-Set-Alias gnoas Git-NumberedNoAssumed
-
 # Utility
 Set-Alias gn Git-GetFileNameByIndex
 Set-Alias gsl Git-NumberedSetLocation
+
+## Assuming
+Set-Alias gas Git-NumberedAssumed
+Set-Alias gasl Git-ListAssumed
+Set-Alias gnoas Git-NumberedNoAssumed
