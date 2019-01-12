@@ -49,6 +49,10 @@ function Get-FileInfoFormat($maxAdded, $maxDeleted, $fileInfo) {
 		'gitroot-path' {$fileInfo.file}
 	}
 
+	if ($fileInfo.lineEndings) {
+		$file = "$file ($($fileInfo.lineEndings))"
+	}
+
 	if ($maxAdded -ne $null) {
 		if ($fileInfo.added -ne $null) {
 			return "{0,3}  {1}  {2,$maxAdded} {3,$maxDeleted}  {4}" -f $index,$fileInfo.state,"+$($fileInfo.added)","-$($fileInfo.deleted)",$file

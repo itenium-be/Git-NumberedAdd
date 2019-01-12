@@ -54,19 +54,36 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 
 function Add-GitNumstat($allFiles, $staged) {
 	if ($staged) {
-		$numstatResult = Invoke-Git diff --numstat --cached
+		$numstatResult = Invoke-Git diff --numstat --cached 2>&1
 	} else {
-		$numstatResult = Invoke-Git diff --numstat
+		$numstatResult = Invoke-Git diff --numstat 2>&1
 	}
 
 	$numstatResult | % {
-		$numstat = $_.Trim().Split("`t")
-		$numstat = @{file=$numstat[2];added=$numstat[0];deleted=$numstat[1]}
-		$matchingStatus = $allFiles | Where {$_.staged -eq $staged -and $numstat.file -eq $_.file}
+		if ($_.StartsWith(' The file will have its original line')) {
+			# Ignore this one
 
-		if ($matchingStatus) {
-			$matchingStatus.added = $numstat.added
-			$matchingStatus.deleted = $numstat.deleted
+		} elseif ($_.StartsWith(' warning: ')) {
+			# Add EOL notice
+			$match = $_ | Select-String -Pattern ' warning: (\w+) will be replaced by (\w+) in (.*)'
+			$fromEol = $match.matches.groups[1]
+			$toEol = $match.matches.groups[2]
+			$fileName = $match.matches.groups[3]
+			$matchingStatus = $allFiles | Where {$_.staged -eq $staged -and $_.file -eq $fileName}
+			if ($matchingStatus) {
+				$matchingStatus.lineEndings = "$fromEol -> $toEol"
+			}
+
+		} else {
+			# Output format: +++ `t --- `t fileName
+			$numstat = $_.Trim().Split("`t")
+			$numstat = @{file=$numstat[2];added=$numstat[0];deleted=$numstat[1]}
+			$matchingStatus = $allFiles | Where {$_.staged -eq $staged -and $numstat.file -eq $_.file}
+
+			if ($matchingStatus) {
+				$matchingStatus.added = $numstat.added
+				$matchingStatus.deleted = $numstat.deleted
+			}
 		}
 	}
 }

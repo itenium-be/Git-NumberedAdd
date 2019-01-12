@@ -33,6 +33,7 @@ Describe 'Parse-GitStatus - with Numstat' {
 		$result.deleted | Should -Be 3
 	}
 
+
 	It 'numstat works for binary files' {
 		Mock Invoke-Git {
 			if (([string]$args).StartsWith("status")) {
@@ -51,19 +52,21 @@ Describe 'Parse-GitStatus - with Numstat' {
 		$result.deleted | Should -Be "-"
 	}
 
-	It 'ignores LF/CRLF warnings' {
+
+	It 'adds LF/CRLF warnings to the fileInfo' {
 		Mock Invoke-Git {
 			if (([string]$args).StartsWith("status")) {
 				" M $file0"
 			} else {
 				# git diff --numstat
-				" warning: LF will be replaced by CRLF in ..."
+				" warning: LF will be replaced by CRLF in $file0`n"
+				" The file will have its original line endings in your working directory.`n"
+				" `t5`t3`t$file0"
 			}
 		}
 
 		$result = Parse-GitStatus $true
 
-		# No crash = good
-		$result.Length | Should -Be 1
+		$result.lineEndings | Should -Be 'LF -> CRLF'
 	}
 }
