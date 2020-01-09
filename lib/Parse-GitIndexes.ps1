@@ -13,7 +13,7 @@ function Parse-GitIndexes($argIndexes, $lookIn = "workingDir") {
 
 
 
-	if ($allFiles.length -lt 10 `
+	if ($allFiles.length -lt 11 `
 		-and ([string]$argIndexes).Length -gt 1 `
 		-and [string]$argIndexes -match '^[0-9]+$'
 	) {
