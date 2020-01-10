@@ -1,12 +1,39 @@
 . $PSScriptRoot\..\git-numbered.ps1
 
-$file0 = "TestDrive:\file0"
-$file1 = "TestDrive:\file1"
-
 
 Describe 'Parse-GitStatus' {
+	$file0 = "TestDrive:\file0"
+	$file1 = "TestDrive:\file1"
+	$file2 = "TestDrive:\spacey file2"
+
 	New-Item $file0
 	New-Item $file1
+	New-Item $file2
+
+	# Setup/Cleanup crashed...
+	# BeforeEach {
+	# 	Push-Location "TestDrive:"
+	# 	New-Item $file0
+	# 	New-Item $file1
+	# }
+
+	# AfterEach {
+	# 	Remove-Item $file0
+	# 	Remove-Item $file1
+	# 	Pop-Location
+	# }
+
+	It 'Add quotes around filename with spaces if it is not yet the case' {
+		Mock Invoke-Git { "?? $file2" }
+		$result = Parse-GitStatus
+
+		$result.relativePath | Should -Be "`"$file2`""
+		$result.file | Should -Be "`"$file2`""
+
+		$fullPath = "`"$(Get-Location)\$file2`""
+		$result.fullPath | Should -Be $fullPath
+	}
+
 
 	It 'Passes extra CLI arguments along to git status' {
 		Mock Invoke-Git {

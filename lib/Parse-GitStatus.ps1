@@ -13,8 +13,12 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 		$relativePath = $_.Substring(3)
 		$fullPath = Join-Path $workingDir $relativePath
 		$fullPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($fullPath)
-		# write-host "RELATIVE=$relativePath     FULL=$fullPath"
 		$gitRootPath = $fullPath.Substring($gitRootdir.ToString().Length + 1)
+		# write-host "RELATIVE=$relativePath     FULL=$fullPath     GIT_ROOT=$gitRootPath"
+
+		$relativePath = Add-MissingQuotesToPath($relativePath)
+		$fullPath = Add-MissingQuotesToPath($fullPath)
+		$gitRootPath = Add-MissingQuotesToPath($gitRootPath)
 
 		$returns = @()
 
@@ -50,6 +54,16 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 	return $allFiles
 }
 
+
+function Add-MissingQuotesToPath($path) {
+	if ($path.Contains(" ") -and -not $path.Contains("`"")) {
+		# Added filenames with a space are not surrounded by quotes
+		# while modified files with a space are...?
+		# Fix the quoting issue here:
+		return "`"$path`""
+	}
+	return $path
+}
 
 
 function Add-GitNumstat($allFiles, $staged) {
