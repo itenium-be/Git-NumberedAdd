@@ -1,6 +1,7 @@
 . $PSScriptRoot\..\git-numbered.ps1
 
-
+# Parse-GitIndexes tests with different workingDir/stagingArea
+# See Parse-GitIndexes.Tests.ps1 for common use cases with the same workingDir/stagingArea
 
 Describe 'Parse-GitIndexes - tests with specific stagingArea/workingDir' {
 	BeforeEach {
