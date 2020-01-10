@@ -10,16 +10,19 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 	# ATTN: git status --porcelain returns paths relative from the repository root folder
 	#       git status -s *could* change in the future but returns paths relative to pwd.
 	$allFiles = Invoke-Git status -s $extraArgs | % {
-		$relativePath = $_.Substring(3)
+		$relativePath = $_.Substring(3).Replace("`"", "")
+		# write-host "relativePath: $relativePath"
 		$fullPath = Join-Path $workingDir $relativePath
+		# write-host "fullPath: $fullPath"
 		$fullPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($fullPath)
+		# write-host "fullPath2: $fullPath"
 		$gitRootPath = $fullPath.Substring($gitRootdir.ToString().Length + 1)
+
+		$relativePath = Quote-Path $relativePath
+		$fullPath = Quote-Path $fullPath
+		$gitRootPath = Quote-Path $gitRootPath
+
 		# write-host "RELATIVE=$relativePath     FULL=$fullPath     GIT_ROOT=$gitRootPath"
-
-		$relativePath = Add-MissingQuotesToPath($relativePath)
-		$fullPath = Add-MissingQuotesToPath($fullPath)
-		$gitRootPath = Add-MissingQuotesToPath($gitRootPath)
-
 		$returns = @()
 
 		$staged = $_[0] -ne " " -and $_[0] -ne "?"
@@ -55,11 +58,8 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 }
 
 
-function Add-MissingQuotesToPath($path) {
-	if ($path.Contains(" ") -and -not $path.Contains("`"")) {
-		# Added filenames with a space are not surrounded by quotes
-		# while modified files with a space are...?
-		# Fix the quoting issue here:
+function Quote-Path($path) {
+	if ($path.Contains(" ")) {
 		return "`"$path`""
 	}
 	return $path

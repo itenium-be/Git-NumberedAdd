@@ -9,7 +9,8 @@ function Git-NumberedAdd {
 	}
 
 	$files = $fileInfos | % {$_.fullPath}
-	git add $files -v
+	# write-host "git add -v $files"
+	git add -v $files
 }
 
 
