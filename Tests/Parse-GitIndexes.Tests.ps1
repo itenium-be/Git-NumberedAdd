@@ -18,6 +18,14 @@ $global:gitStatusNumbers.workingDir = @(
 
 
 Describe 'Parse-GitIndexes' {
+	BeforeEach {
+		Push-Location "TestDrive:"
+	}
+
+	AfterEach {
+		Pop-Location
+	}
+
 	It 'Parses a single int argument' {
 		$fileInfos = Parse-GitIndexes @(3)
 		$fileInfos.Length | Should -Be 1

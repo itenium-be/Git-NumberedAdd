@@ -13,13 +13,14 @@ function Parse-GitIndexes($argIndexes, $lookIn = "workingDir") {
 
 
 
-	if ($allFiles.length -lt 11 `
+	if ([string]$argIndexes -match '^[0-9]+$' `
 		-and ([string]$argIndexes).Length -gt 1 `
-		-and [string]$argIndexes -match '^[0-9]+$'
+		-and ($allFiles.length -lt 11 -or [int][string]$argIndexes -ge $allFiles.length)
 	) {
 		# Add by many 1 digit indexes (ex: 035 == 0, 3 and 5)
 		$argIndexes = ([string]$argIndexes).ToCharArray()
 	}
+
 
 	$indexes = @()
 	foreach ($arg in $argIndexes) {
