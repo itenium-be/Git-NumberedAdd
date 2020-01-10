@@ -14,6 +14,9 @@ $global:gitStatusNumbers = @{
 	displayFilesAs='relative-path'; # full-path | relative-path | gitroot-path
 }
 
+# $global:gitStatusNumbers.displayFilesAs="full-path"
+# $global:gitStatusNumbers.displayFilesAs="gitroot-path"
+
 
 Get-ChildItem -Recurse ("$PSScriptRoot\lib\*.ps1") | ForEach-Object {. $_.FullName}
 
