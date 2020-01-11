@@ -98,7 +98,8 @@ function Add-GitNumstat($allFiles, $staged) {
 	$numstatResult | % {
 		# Output format: +++ `t --- `t fileName
 		$numstat = $_.Trim().Split("`t")
-		$numstat = @{file=$numstat[2];added=$numstat[0];deleted=$numstat[1]}
+		$file = Quote-Path $numstat[2]
+		$numstat = @{file=$file;added=$numstat[0];deleted=$numstat[1]}
 		$matchingStatus = $allFiles | Where {$_.staged -eq $staged -and $numstat.file -eq $_.file}
 
 		if ($matchingStatus) {
