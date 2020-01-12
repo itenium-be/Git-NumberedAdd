@@ -13,5 +13,5 @@ jobs:
       shell: pwsh
       run: |
         Install-Module -Name Pester -Force
-        $res = Invoke-Pester -PassThru
+        $res = Invoke-Pester -PassThru -TestName "Parse-GitIndexes"
         $res.FailedCount -eq 0
