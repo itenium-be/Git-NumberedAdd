@@ -1,3 +1,20 @@
+##############################################################################
+#.SYNOPSIS
+# Invokes `git status -s` and parses the result into object/array of objects
+# Called by Git-NumberedStatus
+#
+#.DESCRIPTION
+# Output looks like:
+#
+# @{
+#	state=M(odified), A(dded), R(enamed)
+#	file=The filename as ouputted by git status
+#	staged=$true for staging area, $false for working directory change
+#	fullPath=The full path
+#	relativePath=Relative path to current pwd
+#	oldFile=The original filename in case of a staged rename
+# }
+##############################################################################
 function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 	$hasStaged = $false
 	$hasWorkingDir = $false
@@ -11,6 +28,11 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 	#       git status -s *could* change in the future but returns paths relative to pwd.
 	$allFiles = Invoke-Git status -s $extraArgs | % {
 		$relativePath = $_.Substring(3).Replace("`"", "")
+
+		if ($relativePath -match " -> ") {
+			$oldFilename = $relativePath.Substring(0, $relativePath.IndexOf(" -> "))
+			$relativePath = $relativePath.Substring($relativePath.IndexOf(" -> ") + 4)
+		}
 		# write-host "relativePath: $relativePath"
 		$fullPath = Join-Path $workingDir $relativePath
 		# write-host "fullPath: $fullPath"
@@ -28,7 +50,7 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 		$staged = $_[0] -ne " " -and $_[0] -ne "?"
 		if ($staged) {
 			$hasStaged = $true
-			$returns += @{state=$_[0];file=$gitRootPath;staged=$true;fullPath=$fullPath;relativePath=$relativePath}
+			$returns += @{state=$_[0];file=$gitRootPath;staged=$true;fullPath=$fullPath;relativePath=$relativePath;oldFile=$oldFilename}
 		}
 
 		$isWorkingDir = $_[1] -ne " "

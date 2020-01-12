@@ -23,6 +23,22 @@ Describe 'Parse-GitStatus' {
 	# 	Pop-Location
 	# }
 
+	It 'Can parse a modified file rename' {
+		Mock Invoke-Git { "RM $file0 -> $file2" }
+		$result = Parse-GitStatus
+
+		$result.Length | Should -Be 2
+		$result[0].file | Should -Be "`"$file2`""
+		$result[0].state | Should -Be "R"
+		$result[0].oldFile | Should -Be $file0
+		$result[0].staged | Should -Be $true
+
+		$result[1].file | Should -Be "`"$file2`""
+		$result[1].state | Should -Be "M"
+		$result[1].oldFile | Should -Be $null
+		$result[1].staged | Should -Be $false
+	}
+
 	It 'Add quotes around filename with spaces if it is not yet the case' {
 		Mock Invoke-Git { "?? $file2" }
 		$result = Parse-GitStatus

@@ -1,6 +1,6 @@
 ##############################################################################
 #.SYNOPSIS
-# Display the results of Parse-GitStatus
+# Calls Parse-GitStatus and displays the results
 #
 #.DESCRIPTION
 # Output looks like:
@@ -79,6 +79,10 @@ function Get-FileInfoFormat($maxAdded, $maxDeleted, $fileInfo) {
 		'full-path' {$fileInfo.fullPath}
 		'relative-path' {$fileInfo.relativePath}
 		'gitroot-path' {$fileInfo.file}
+	}
+
+	if ($fileInfo.oldFile) {
+		$file = "$($fileInfo.oldFile) -> $file"
 	}
 
 	if ($fileInfo.lineEndings) {
