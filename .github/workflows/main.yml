@@ -14,4 +14,8 @@ jobs:
       run: |
         Install-Module -Name Pester -Force
         $res = Invoke-Pester -PassThru
-        $res.FailedCount -eq 0
+        if ($res.FailedCount -eq 0) {
+          exit 0
+        } else {
+          exit 1
+        }
