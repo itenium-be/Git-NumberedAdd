@@ -5,6 +5,31 @@ PowerShell script to git add, diff, reset, etc files with fabricated indexes.
 See [the itenium blog for a more detailed explanation](https://itenium.be/blog/productivity/git-numbered-add-for-powershell).
 
 
+## Running Tests
+
+```powershell
+Install-Module -Name Pester -Force -SkipPublisherCheck
+Install-Module PestWatch
+
+# Run all & watch
+Invoke-PesterWatcher
+
+# Run a single "Describe" test suite
+Invoke-Pester -TestName "Parse-GitStatus"
+
+# Run matching files
+Invoke-Pester ./tests/Parse-GitStatus*
+
+# Run CI
+Invoke-Pester -PassThru
+```
+
+Use `Write-Host` to log something inside a test.
+
+[wiki/Should](https://github.com/pester/Pester/wiki/Should)
+
+
+
 ## Available actions
 
 ```powershell
@@ -44,7 +69,7 @@ Git-NumberedSetLocation # Alias: gsl
 Git-NumberedAssumed # alias: gas
 ```
 
-## Accepted argument values for matching indexes
+### Accepted argument values for matching indexes
 
 ```powershell
 # Stage files 0, 1 and 3
@@ -69,7 +94,7 @@ Git-NumberedAdd -3 5 6 8-9
 
 
 
-## Git-Assuming
+### Git-Assuming
 
 Unassume files back again after `Git-NumberedAssumed` (alias: gas)
 
@@ -81,18 +106,3 @@ Git-ListAssumed # alias: gasl
 # git update-index --no-assume-unchanged
 Git-NumberedUnassumed # alias: gnoas
 ```
-
-
-
-# Running Tests
-
-```powershell
-Install-Module -Name Pester -Force -SkipPublisherCheck
-Install-Module PestWatch
-
-Invoke-PesterWatcher
-```
-
-Use `Write-Host` to log something inside a test.
-
-[wiki/Should](https://github.com/pester/Pester/wiki/Should)

@@ -21,9 +21,10 @@ function Parse-GitIndexes($argIndexes, $lookIn = "workingDir") {
 		$argIndexes = ([string]$argIndexes).ToCharArray()
 	}
 
-
 	$indexes = @()
 	foreach ($arg in $argIndexes) {
+		$index = $null;
+
 		if ($arg -match '^\d+-\d+$') {
 			# Add by range (ex: 3-5)
 			$begin = ($arg -split '-')[0]
