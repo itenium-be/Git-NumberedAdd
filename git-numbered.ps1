@@ -18,6 +18,11 @@ $global:gitStatusNumbers = @{
 # $global:gitStatusNumbers.displayFilesAs="gitroot-path"
 
 
+# Use Utf8 when capturing git output
+[Console]::OutputEncoding = [System.Text.Encoding]::Utf8
+
+
+
 Get-ChildItem -Recurse ("$PSScriptRoot\lib\*.ps1") | ForEach-Object {. $_.FullName}
 
 
