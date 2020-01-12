@@ -1,0 +1,17 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run pester tests
+      shell: pwsh
+      run: |
+        Install-Module -Name Pester -Force
+        $res = Invoke-Pester -PassThru
+        $res.FailedCount -eq 0
