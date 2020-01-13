@@ -1,3 +1,6 @@
+# ATTN: This file is 2x the same code (assumeUnchanged & skipWorktree)
+
+
 ##############################################################################
 #.SYNOPSIS
 # `git update-index --assume-unchanged` the indexes passed as $args in the working directory
@@ -39,5 +42,63 @@ function Git-ListAssumed {
 ##############################################################################
 function Git-NumberedUnassumed {
 	$file = $global:assumedFiles[$args]
+	if (-not $file) {
+		Write-Host "Couldn't find hidden file with index $args"
+	}
 	git update-index --no-assume-unchanged $file
+}
+
+
+
+
+
+
+
+
+
+##############################################################################
+#.SYNOPSIS
+# `git update-index --skip-worktree` the indexes passed as $args in the working directory
+##############################################################################
+function Git-NumberedHidden {
+	$fileInfos = Parse-GitIndexes $args 'workingDir'
+	if (-not $fileInfos) {
+		return
+	}
+
+	$files = $fileInfos | % {$_.fullPath}
+	git update-index --skip-worktree $files
+}
+
+
+# To Unhide we need to list the hidden files first
+
+$global:hiddenFiles = @()
+
+
+##############################################################################
+#.SYNOPSIS
+# Displays all currently git skip worktree files with indexes to be used by Git-NumberedHidden
+##############################################################################
+function Git-ListHidden {
+	$files = (git ls-files -v) | Where-Object { $_.StartsWith("S") } | % { $_.Substring(2) }
+	$index = 0
+	$files | % {
+		Write-Host "$index $_"
+		$global:hiddenFiles += $_
+		$index++
+	}
+}
+
+
+##############################################################################
+#.SYNOPSIS
+# Git unhides a single index passed as $args as displayed by Git-ListHidden
+##############################################################################
+function Git-NumberedUnhidden {
+	$file = $global:hiddenFiles[$args]
+	if (-not $file) {
+		Write-Host "Couldn't find hidden file with index $args"
+	}
+	git update-index --no-skip-worktree $file
 }

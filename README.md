@@ -106,3 +106,15 @@ Git-ListAssumed # alias: gasl
 # git update-index --no-assume-unchanged
 Git-NumberedUnassumed # alias: gnoas
 ```
+
+#### Git-SkipWorktree
+
+Also for `--skip-worktree` with `Git-NumberedHidden` (alias: ghide)
+
+```powershell
+# List all currently hidden files
+Git-ListHidden # alias: glh
+
+# git update-index --no-skip-worktree
+Git-NumberedUnhidden # alias: gunhide
+```

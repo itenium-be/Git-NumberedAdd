@@ -46,6 +46,10 @@ Set-Alias gas Git-NumberedAssumed
 Set-Alias gasl Git-ListAssumed
 Set-Alias gnoas Git-NumberedUnassumed
 
+Set-Alias ghide Git-NumberedHidden
+Set-Alias glh Git-ListHidden
+Set-Alias gunhide Git-NumberedUnhidden
+
 
 ##############################################################################
 #.SYNOPSIS
