@@ -8,9 +8,20 @@ function Git-NumberedAdd {
 		return
 	}
 
-	$files = $fileInfos | % {$_.fullPath}
+	$files = $fileInfos | % {
+		if ($_ -is [string]) {
+			$commitMsg = $_
+		} else {
+			$_.fullPath
+		}
+	}
 	# write-host "git add -v $files"
 	git add -v $files
+
+
+	if ($commitMsg) {
+		git commit -m $commitMsg
+	}
 }
 
 

@@ -29,6 +29,32 @@ Describe 'Parse-GitIndexes' {
 		Pop-Location
 	}
 
+	It 'Parses the last argument as commit message if it could not otherwise be parsed' {
+		$fileInfos = Parse-GitIndexes @(0,1,"commit message")
+
+		$fileInfos.Length | Should -Be 3
+		$fileInfos[0].file | Should -Be 'file0'
+		$fileInfos[1].file | Should -Be 'file1'
+		$fileInfos[2] | Should -Be "commit message"
+	}
+
+	It 'Parses the last argument as commit message with a single index' {
+		$fileInfos = Parse-GitIndexes @(0,"commit message")
+
+		$fileInfos.Length | Should -Be 2
+		$fileInfos[0].file | Should -Be 'file0'
+		$fileInfos[1] | Should -Be "commit message"
+	}
+
+	It 'Parses the last argument as commit message with multiple conactenated indexes' {
+		$fileInfos = Parse-GitIndexes @("03","commit message")
+
+		$fileInfos.Length | Should -Be 3
+		$fileInfos[0].file | Should -Be 'file0'
+		$fileInfos[1].file | Should -Be 'file3'
+		$fileInfos[2] | Should -Be "commit message"
+	}
+
 	It 'Parses a single int argument' {
 		$fileInfos = Parse-GitIndexes @(3)
 		$fileInfos.Length | Should -Be 1

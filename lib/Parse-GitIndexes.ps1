@@ -11,19 +11,19 @@ function Parse-GitIndexes($argIndexes, $lookIn = "workingDir") {
 		$allFiles = @($allFiles)
 	}
 
-
-
-	if ([string]$argIndexes -match '^[0-9]+$' `
-		-and ([string]$argIndexes).Length -gt 1 `
-		-and ($allFiles.length -lt 11 -or [int][string]$argIndexes -ge $allFiles.length)
+	if ([string]$argIndexes -match '^([0-9]+)(?: (\D+))?$' `
+		-and ($Matches[0].Length -gt 1) `
+		-and ($allFiles.length -lt 11 -or [int]$Matches[0] -ge $allFiles.length)
 	) {
 		# Add by many 1 digit indexes (ex: 035 == 0, 3 and 5)
-		$argIndexes = ([string]$argIndexes).ToCharArray()
+		$argIndexes = $Matches[1].ToCharArray()
+		$commitMsg = $Matches[2]
 	}
 
 	$indexes = @()
-	foreach ($arg in $argIndexes) {
-		$index = $null;
+	for ($counter = 0; $counter -lt $argIndexes.Length; $counter++) {
+		$arg = $argIndexes[$counter]
+		$index = $null; # Initialization for [ref] usage below (CI complains otherwise)
 
 		if ($arg -match '^\d+-\d+$') {
 			# Add by range (ex: 3-5)
@@ -49,18 +49,32 @@ function Parse-GitIndexes($argIndexes, $lookIn = "workingDir") {
 			# Add by index (ex: 3, 15)
 			$indexes += $index
 
+		} elseif ($argIndexes.Length -gt 1 -and $argIndexes.Length -eq $counter + 1) {
+			# Last argument: commit message
+			$commitMsg = $arg
+
 		} else {
 			Write-Host "Unparseable argument '$arg'" -ForegroundColor DarkMagenta
 		}
 	}
 
-	return $indexes | % {$_} | ? {
+	$return = $indexes | ? {
 		if ($_ -ge $allFiles.length) {
 			Write-Host "$_ is outside of the boundaries of Git-NumberedStatus (Length: $($allFiles.length))" -ForegroundColor DarkMagenta
 			return $false
 		}
 		return $true
 	} | % { $allFiles[$_] }
+
+	if ($commitMsg) {
+		if ($return -is [array]) {
+			$return += $commitMsg
+		} else {
+			$return = $return,$commitMsg
+		}
+	}
+
+	return $return
 }
 
 
