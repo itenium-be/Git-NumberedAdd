@@ -73,6 +73,8 @@ Describe 'Parse-GitStatus - with Numstat' {
 
 
 	It 'adds LF/CRLF warnings to the fileInfo' {
+		# This test fails on the CI because of Write-Error resulting in a WriteErrorException
+		# Adding -ErrorAction silentlycontinue already made it crash locally
 		Mock Invoke-Git {
 			if (([string]$args).StartsWith("status")) {
 				" M $file0"
@@ -80,6 +82,10 @@ Describe 'Parse-GitStatus - with Numstat' {
 				# git diff --numstat
 				Write-Error "warning: LF will be replaced by CRLF in $file0."
 				Write-Error "The file will have its original line endings in your working directory."
+
+				# $Host.UI.WriteErrorLine("warning: LF will be replaced by CRLF in $file0.")
+				# $Host.UI.WriteErrorLine("The file will have its original line endings in your working directory.")
+
 				" `t5`t3`t$file0"
 			}
 		}
