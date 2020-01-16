@@ -1,4 +1,4 @@
-. $PSScriptRoot\..\git-numbered.ps1
+. $PSScriptRoot\TestBed.ps1
 
 # Parse-GitIndexes tests for common use cases with the same workingDir/stagingArea
 # See Parse-GitIndexesSingle.Tests.ps1 for edge cases with special workingDir/stagingArea

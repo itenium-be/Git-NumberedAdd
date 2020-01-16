@@ -1,4 +1,4 @@
-. $PSScriptRoot\..\git-numbered.ps1
+. $PSScriptRoot\TestBed.ps1
 
 $file0 = "TestDrive:\file0"
 $file1 = "TestDrive:\file1"

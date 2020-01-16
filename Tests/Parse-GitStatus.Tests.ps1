@@ -1,4 +1,4 @@
-. $PSScriptRoot\..\git-numbered.ps1
+. $PSScriptRoot\TestBed.ps1
 
 
 Describe 'Parse-GitStatus' {
