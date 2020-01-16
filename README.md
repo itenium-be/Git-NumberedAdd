@@ -4,6 +4,14 @@ PowerShell script to git add, diff, reset, etc files with fabricated indexes.
 
 See [the itenium blog for a more detailed explanation](https://itenium.be/blog/productivity/git-numbered-add-for-powershell).
 
+## PowerShell Gallery
+
+[Git-NumberedAdd](https://www.powershellgallery.com/packages/Git-NumberedAdd)
+
+```powershell
+Install-Module -Name Git-NumberedAdd
+```
+
 
 ## Running Tests
 
@@ -90,6 +98,9 @@ Git-NumberedAdd +3
 
 # Combine as you like
 Git-NumberedAdd -3 5 6 8-9
+
+# Add & Commit
+Git-NumberedAdd 0 1 3 "commit message"
 ```
 
 
@@ -117,4 +128,13 @@ Git-ListHidden # alias: glh
 
 # git update-index --no-skip-worktree
 Git-NumberedUnhidden # alias: gunhide
+```
+
+
+## Publishing
+
+[Generate ApiKey](https://www.powershellgallery.com/account/apikeys)
+
+```powershell
+Publish-Module -Path .\ -NuGetApiKey key
 ```
