@@ -25,9 +25,13 @@ $global:gitStatusNumbers = @{
 
 Get-ChildItem -Recurse ("$PSScriptRoot\lib\*.ps1") | ForEach-Object {. $_.FullName}
 
-
+# If you get stuck, get help!
 Set-Alias gnh Git-NumberedHelp
+
+# Start with:
 Set-Alias gs Git-NumberedStatus
+Set-Alias gis Git-NumberedStatus   # Not exported
+Set-Alias gits Git-NumberedStatus  # Not exported
 
 # Actions
 Set-Alias ga Git-NumberedAdd
