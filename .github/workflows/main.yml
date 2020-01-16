@@ -13,7 +13,10 @@ jobs:
       shell: pwsh
       run: |
         Install-Module -Name Pester -Force
+        ls
         mv Git-NumberedAdd.psm1 Git-NumberedAdd.ps1
+        echo "uhoh man"
+        ls
         $res = Invoke-Pester -PassThru
         # There is a failing test on the CI because of Write-Error
         if ($res.FailedCount -eq 1) {
