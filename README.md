@@ -12,6 +12,12 @@ See [the itenium blog for a more detailed explanation](https://itenium.be/blog/p
 Install-Module -Name Git-NumberedAdd
 ```
 
+### Local
+
+```ps1
+Import-Module .\Git-NumberedAdd.psd1
+```
+
 
 ## Running Tests
 
