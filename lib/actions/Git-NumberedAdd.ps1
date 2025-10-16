@@ -8,16 +8,17 @@ function Git-NumberedAdd {
 		return
 	}
 
-	$files = $fileInfos | % {
-		if ($_ -is [string]) {
-			$commitMsg = $_
+	$files = @()
+	$commitMsg = $null
+	foreach ($item in $fileInfos) {
+		if ($item -is [string]) {
+			$commitMsg = $item
 		} else {
-			$_.fullPath
+			$files += $item.FullPath.Trim('"')
 		}
 	}
-	# write-host "git add -v $files"
-	git add -v $files
 
+	git add -v @files
 
 	if ($commitMsg) {
 		git commit -m $commitMsg
@@ -35,6 +36,6 @@ function Git-NumberedAddPatch {
 		return
 	}
 
-	$files = $fileInfos | % {$_.fullPath}
-	git add $files -vp
+	$files = $fileInfos | % {$_.fullPath.Trim('"')}
+	git add @files -vp
 }

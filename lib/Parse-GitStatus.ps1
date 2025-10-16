@@ -26,7 +26,10 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 
 	# ATTN: git status --porcelain returns paths relative from the repository root folder
 	#       git status -s *could* change in the future but returns paths relative to pwd.
-	$allFiles = Invoke-Git status -s $extraArgs | % {
+
+	$allArgs = @('status', '-s')
+	if ($extraArgs) { $allArgs += $extraArgs }
+	$allFiles = Invoke-Git @allArgs | % {
 		$relativePath = $_.Substring(3).Replace("`"", "")
 
 		if ($relativePath -match " -> ") {
