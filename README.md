@@ -144,3 +144,12 @@ Git-NumberedUnhidden # alias: gunhide
 ```powershell
 Publish-Module -Path .\ -NuGetApiKey key
 ```
+
+
+## Random Repository
+
+Create a repository with some random files/changes in directory `Playground`.
+
+```ps1
+./create-random-repo.ps1
+```
