@@ -1,6 +1,6 @@
 function Invoke-Git {
 	# Exists solely for mocking purposes
-	& git $args
+	& git @args
 }
 
 function Get-GitRootLocation {
