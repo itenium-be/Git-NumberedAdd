@@ -8,6 +8,6 @@ function Git-NumberedReset {
 		return
 	}
 
-	$toReset = $fileInfos | % {$_.fullPath}
-	git reset HEAD $toReset
+	$toReset = $fileInfos | % {$_.fullPath.Trim('"')}
+	git reset HEAD @($toReset)
 }
