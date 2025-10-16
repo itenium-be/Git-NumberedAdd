@@ -1,29 +1,19 @@
 . $PSScriptRoot\TestBed.ps1
 
-$file0 = "TestDrive:\file0"
-$file1 = "TestDrive:\file1"
-$file2 = "TestDrive:\spacey file2"
-
 Describe 'Parse-GitStatus - with Numstat' {
-	New-Item $file0
-	New-Item $file1
-	New-Item $file2
-
-	# BeforeEach {
-	# 	Push-Location "TestDrive:"
-	# }
-
-	# AfterEach {
-	# 	Pop-Location
-	# }
+	BeforeAll {
+		New-Item -Path "TestDrive:\file0" -ItemType File
+		New-Item -Path "TestDrive:\file1" -ItemType File
+		New-Item -Path "TestDrive:\spacey file2" -ItemType File
+	}
 
 	It '--numstat works for quoted files' {
 		Mock Invoke-Git {
 			if (([string]$args).StartsWith("status")) {
-				" M $file2"
+				" M `"TestDrive:\spacey file2`""
 			} else {
 				# git diff --numstat
-				"`t5`t3`t$file2"
+				"`t5`t3`tTestDrive:\spacey file2"
 			}
 		}
 
@@ -37,17 +27,17 @@ Describe 'Parse-GitStatus - with Numstat' {
 	It 'Adds git diff --numstat to the output' {
 		Mock Invoke-Git {
 			if (([string]$args).StartsWith("status")) {
-				" M $file0"
+				" M TestDrive:\file0"
 			} else {
 				# git diff --numstat
-				"`t5`t3`t$file0"
+				"`t5`t3`tTestDrive:\file0"
 			}
 		}
 
 		$result = Parse-GitStatus $true
 
 		$result.Length | Should -Be 1
-		$result.file | Should -Be $file0
+		$result.file | Should -Be "TestDrive:\file0"
 		$result.added | Should -Be 5
 		$result.deleted | Should -Be 3
 	}
@@ -56,17 +46,17 @@ Describe 'Parse-GitStatus - with Numstat' {
 	It 'numstat works for binary files' {
 		Mock Invoke-Git {
 			if (([string]$args).StartsWith("status")) {
-				" M $file0"
+				" M TestDrive:\file0"
 			} else {
 				# git diff --numstat
-				"`t-`t-`t$file0"
+				"`t-`t-`tTestDrive:\file0"
 			}
 		}
 
 		$result = Parse-GitStatus $true
 
 		$result.Length | Should -Be 1
-		$result.file | Should -Be $file0
+		$result.file | Should -Be "TestDrive:\file0"
 		$result.added | Should -Be "-"
 		$result.deleted | Should -Be "-"
 	}
@@ -77,16 +67,16 @@ Describe 'Parse-GitStatus - with Numstat' {
 		# Adding -ErrorAction silentlycontinue already made it crash locally
 		Mock Invoke-Git {
 			if (([string]$args).StartsWith("status")) {
-				" M $file0"
+				" M TestDrive:\file0"
 			} else {
 				# git diff --numstat
-				Write-Error "warning: LF will be replaced by CRLF in $file0."
+				Write-Error "warning: LF will be replaced by CRLF in TestDrive:\file0."
 				Write-Error "The file will have its original line endings in your working directory."
 
-				# $Host.UI.WriteErrorLine("warning: LF will be replaced by CRLF in $file0.")
+				# $Host.UI.WriteErrorLine("warning: LF will be replaced by CRLF in TestDrive:\file0.")
 				# $Host.UI.WriteErrorLine("The file will have its original line endings in your working directory.")
 
-				" `t5`t3`t$file0"
+				" `t5`t3`tTestDrive:\file0"
 			}
 		}
 

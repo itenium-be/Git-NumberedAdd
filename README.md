@@ -28,9 +28,6 @@ Install-Module PestWatch
 # Run all & watch
 Invoke-PesterWatcher
 
-# Run a single "Describe" test suite
-Invoke-Pester -TestName "Parse-GitStatus"
-
 # Run matching files
 Invoke-Pester ./tests/Parse-GitStatus*
 
@@ -40,7 +37,7 @@ Invoke-Pester -PassThru
 
 Use `Write-Host` to log something inside a test.
 
-[wiki/Should](https://github.com/pester/Pester/wiki/Should)
+[Assertions: Should](https://pester.dev/docs/assertions/should-command)
 
 
 
