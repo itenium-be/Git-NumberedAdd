@@ -32,6 +32,10 @@ function Git-NumberedDiff {
 ##############################################################################
 function Git-NumberedDiffCached {
 	if ($args.length -eq 0 -or $args[0] -eq $null) {
+		if ($global:gitStatusNumbers.stagingArea.length -eq 0) {
+			Write-Host "Staging area is empty."
+			return
+		}
 		$args = @("0-$($global:gitStatusNumbers.stagingArea.length - 1)")
 	}
 
