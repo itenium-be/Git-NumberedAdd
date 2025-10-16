@@ -53,14 +53,27 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 		$staged = $_[0] -ne " " -and $_[0] -ne "?"
 		if ($staged) {
 			$hasStaged = $true
-			$returns += @{state=$_[0];file=$gitRootPath;staged=$true;fullPath=$fullPath;relativePath=$relativePath;oldFile=$oldFilename}
+			$returns += @{
+				state=$_[0];
+				file=$gitRootPath;
+				staged=$true;
+				fullPath=$fullPath;
+				relativePath=$relativePath;
+				oldFile=$oldFilename;
+			}
 		}
 
 		$isWorkingDir = $_[1] -ne " "
 		if ($isWorkingDir) {
 			$hasWorkingDir = $true
 			$state = If ($_[1] -eq "?") {"A"} Else {$_[1]}
-			$returns += @{state=$state;file=$gitRootPath;staged=$false;fullPath=$fullPath;relativePath=$relativePath}
+			$returns += @{
+				state=$state;
+				file=$gitRootPath;
+				staged=$false;
+				fullPath=$fullPath;
+				relativePath=$relativePath;
+			}
 		}
 		return $returns
 
