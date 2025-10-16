@@ -1,6 +1,6 @@
 @{
 RootModule = 'Git-NumberedAdd.psm1'
-ModuleVersion = '1.1'
+ModuleVersion = '1.2'
 GUID = '798d08b3-ae22-4e49-a8cb-b995654e87e9'
 Author = 'Wouter Van Schandevijl'
 CompanyName = 'itenium'
@@ -56,7 +56,7 @@ PrivateData = @{
         LicenseUri = 'https://github.com/itenium-be/Git-NumberedAdd/blob/master/LICENSE'
         ProjectUri = 'https://github.com/itenium-be/Git-NumberedAdd'
         # IconUri = ''
-        ReleaseNotes = 'https://github.com/itenium-be/Git-NumberedAdd/releases/tag/v1.1'
+        ReleaseNotes = 'https://github.com/itenium-be/Git-NumberedAdd/releases/tag/v1.2'
     }
 }
 
