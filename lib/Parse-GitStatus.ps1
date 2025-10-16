@@ -120,13 +120,16 @@ function Add-GitNumstat($allFiles, $staged) {
 
 		} elseif ($line.StartsWith('warning: ')) {
 			# Add EOL notice
-			$match = $line | Select-String -Pattern 'warning: (\w+) will be replaced by (\w+) in (.*)\.'
-			$fromEol = $match.matches.groups[1]
-			$toEol = $match.matches.groups[2]
-			$fileName = $match.matches.groups[3].Value.Replace('/', '\')
-			$matchingStatus = $allFiles | Where {$_.file -eq $fileName}
-			if ($matchingStatus) {
-				$matchingStatus | Add-Member -NotePropertyName 'lineEndings' -NotePropertyValue "$fromEol -> $toEol" -Force
+			$match = $line | Select-String -Pattern "warning: (?<from>\w+) will be replaced by (?<to>\w+) in (?<file>.*)\.|warning: in the working copy of '(?<file>.*)', (?<from>\w+) will be replaced by (?<to>\w+) the next time Git touches it"
+
+			if ($match) {
+				$fromEol = $match.matches[0].groups['from']
+				$toEol = $match.matches[0].groups['to']
+				$fileName = $match.matches[0].groups['file'].Value.Replace('/', '\')
+				$matchingStatus = $allFiles | Where {$_.file -eq $fileName}
+				if ($matchingStatus) {
+					$matchingStatus | Add-Member -NotePropertyName 'lineEndings' -NotePropertyValue "$fromEol -> $toEol" -Force
+				}
 			}
 		}
 	}
