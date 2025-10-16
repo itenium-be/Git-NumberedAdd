@@ -16,7 +16,6 @@ function Git-NumberedDiff {
 	# so that new files are shown in the diff
 	$newFiles = $fileInfos | ? {$_.state -eq 'A'} | % {$_.fullPath.Trim('"')}
 	if ($newFiles) {
-		Write-Host "git add --intent-to-add $newFiles"
 		git add -Nv @($newFiles)
 	}
 
