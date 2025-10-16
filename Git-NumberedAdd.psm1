@@ -64,8 +64,23 @@ function Git-NumberedHelp() {
 		$example = If ($help.Examples) {$true} Else {''}
 		$alias = Get-Alias -Definition $name -ErrorAction SilentlyContinue
 
-		return @{name=$name;description=$help.Synopsis;example=$example;alias=$alias}
+		return @{Name=$name;Description=$help.Synopsis;Examples=$example;Alias=$alias}
 	}
 
-	$table.ForEach({[PSCustomObject]$_}) | Format-Table -AutoSize
+	$table.ForEach({[PSCustomObject]$_}) | Format-Table Alias, Name, Description, Examples -AutoSize
+
+	Write-Host "Configuration`n==============" -ForegroundColor Yellow
+	Write-Host "To update: `$global:gitStatusNumbers.stagedColor = 'Red'"
+	$options = @(
+		[PSCustomObject]@{ Setting = 'stagedColor'; Value = $global:gitStatusNumbers.stagedColor; Description = "" }
+		[PSCustomObject]@{ Setting = 'addedColor'; Value = $global:gitStatusNumbers.addedColor }
+		[PSCustomObject]@{ Setting = 'modifiedColor'; Value = $global:gitStatusNumbers.modifiedColor }
+		[PSCustomObject]@{ Setting = 'deletedColor'; Value = $global:gitStatusNumbers.deletedColor }
+		[PSCustomObject]@{ Setting = 'renamedColor'; Value = $global:gitStatusNumbers.renamedColor }
+		[PSCustomObject]@{ Setting = 'includeNumstat'; Value = $global:gitStatusNumbers.includeNumstat; Description = "Show added/deleted line counts" }
+		[PSCustomObject]@{ Setting = 'displayFilesAs'; Value = $global:gitStatusNumbers.displayFilesAs; Description = "One of: full-path | relative-path | gitroot-path" }
+	)
+	$options | Format-Table Setting, Value, Description -AutoSize
+
+	Write-Host "Tutorial: https://itenium.be/blog/productivity/git-numbered-add-for-powershell"
 }
