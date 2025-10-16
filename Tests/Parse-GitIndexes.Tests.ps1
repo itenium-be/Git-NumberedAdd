@@ -3,25 +3,24 @@
 # Parse-GitIndexes tests for common use cases with the same workingDir/stagingArea
 # See Parse-GitIndexesSingle.Tests.ps1 for edge cases with special workingDir/stagingArea
 
-$global:gitStatusNumbers.stagingArea = @(
-	@{state="M";file="staged0";staged=$true},
-	@{state="M";file="staged1";staged=$true},
-	@{state="M";file="staged2";staged=$true}
-)
-
-$global:gitStatusNumbers.workingDir = @(
-	@{state="M";file="file0";staged=$false},
-	@{state="M";file="file1";staged=$false},
-	@{state="M";file="file2";staged=$false},
-	@{state="M";file="file3";staged=$false},
-	@{state="M";file="file4";staged=$false},
-	@{state="M";file="file5";staged=$false},
-	@{state="M";file="file6";staged=$false}
-)
-
-
 Describe 'Parse-GitIndexes' {
 	BeforeEach {
+		$global:gitStatusNumbers.stagingArea = @(
+			@{state="M";file="staged0";staged=$true},
+			@{state="M";file="staged1";staged=$true},
+			@{state="M";file="staged2";staged=$true}
+		)
+
+		$global:gitStatusNumbers.workingDir = @(
+			@{state="M";file="file0";staged=$false},
+			@{state="M";file="file1";staged=$false},
+			@{state="M";file="file2";staged=$false},
+			@{state="M";file="file3";staged=$false},
+			@{state="M";file="file4";staged=$false},
+			@{state="M";file="file5";staged=$false},
+			@{state="M";file="file6";staged=$false}
+		)
+
 		Push-Location "TestDrive:"
 	}
 
@@ -46,7 +45,7 @@ Describe 'Parse-GitIndexes' {
 		$fileInfos[1] | Should -Be "commit message"
 	}
 
-	It 'Parses the last argument as commit message with multiple conactenated indexes' {
+	It 'Parses the last argument as commit message with multiple concatenated indexes' {
 		$fileInfos = Parse-GitIndexes @("03","commit message")
 
 		$fileInfos.Length | Should -Be 3
