@@ -30,8 +30,6 @@ Set-Alias gnh Git-NumberedHelp
 
 # Start with:
 Set-Alias gs Git-NumberedStatus
-Set-Alias gis Git-NumberedStatus   # Not exported
-Set-Alias gits Git-NumberedStatus  # Not exported
 
 # Actions
 Set-Alias ga Git-NumberedAdd
