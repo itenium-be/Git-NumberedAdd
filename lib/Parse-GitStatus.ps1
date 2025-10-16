@@ -113,7 +113,7 @@ function Add-GitNumstat($allFiles, $staged) {
 			$fileName = $match.matches.groups[3].Value.Replace('/', '\')
 			$matchingStatus = $allFiles | Where {$_.file -eq $fileName}
 			if ($matchingStatus) {
-				$matchingStatus.lineEndings = "$fromEol -> $toEol"
+				$matchingStatus | Add-Member -NotePropertyName 'lineEndings' -NotePropertyValue "$fromEol -> $toEol" -Force
 			}
 		}
 	}
