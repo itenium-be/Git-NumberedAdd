@@ -22,5 +22,5 @@ $global:gitStatusNumbers = @{
 # [Console]::OutputEncoding = [System.Text.Encoding]::Utf8
 
 BeforeAll {
-	Get-ChildItem -Recurse ("$PSScriptRoot\..\lib\*.ps1") | ForEach-Object {. $_.FullName}
+	Get-ChildItem -Recurse ("$PSScriptRoot\..\Git-NumberedAdd\lib\*.ps1") | ForEach-Object {. $_.FullName}
 }

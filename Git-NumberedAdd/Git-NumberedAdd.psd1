@@ -1,6 +1,6 @@
 @{
 RootModule = 'Git-NumberedAdd.psm1'
-ModuleVersion = '1.2'
+ModuleVersion = '1.2.2'
 GUID = '798d08b3-ae22-4e49-a8cb-b995654e87e9'
 Author = 'Wouter Van Schandevijl'
 CompanyName = 'itenium'

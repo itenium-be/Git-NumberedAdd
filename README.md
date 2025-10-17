@@ -139,7 +139,7 @@ Git-NumberedUnhidden # alias: gunhide
 [Generate ApiKey](https://www.powershellgallery.com/account/apikeys)
 
 ```powershell
-Publish-Module -Path .\ -NuGetApiKey key
+Publish-Module -Path .\Git-NumberedAdd -NuGetApiKey key
 ```
 
 
