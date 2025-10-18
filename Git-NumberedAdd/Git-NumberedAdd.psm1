@@ -58,7 +58,7 @@ Set-Alias gunhide Git-NumberedUnhidden
 # Displays help for all Git-Numbered actions and utilities
 ##############################################################################
 function Git-NumberedHelp() {
-	$table = Get-Command -Name "Git-*" | ? { $_.CommandType -eq 'Function' } | % {
+	$table = Get-Command -Name "Git-*" | Where-Object { $_.CommandType -eq 'Function' } | ForEach-Object {
 		$name = $_.name
 		$help = get-help $_ -Full
 		$example = If ($help.Examples) {$true} Else {''}

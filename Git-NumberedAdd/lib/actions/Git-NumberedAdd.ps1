@@ -36,6 +36,6 @@ function Git-NumberedAddPatch {
 		return
 	}
 
-	$files = $fileInfos | % {$_.fullPath.Trim('"')}
+	$files = $fileInfos | ForEach-Object {$_.fullPath.Trim('"')}
 	git add @files -vp
 }

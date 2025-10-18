@@ -8,6 +8,6 @@ function Git-NumberedCheckout {
 		return
 	}
 
-	$toCheckout = $fileInfos | % {$_.fullPath.Trim('"')}
+	$toCheckout = $fileInfos | ForEach-Object {$_.fullPath.Trim('"')}
 	git checkout HEAD @($toCheckout)
 }

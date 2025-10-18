@@ -11,7 +11,7 @@ function Git-NumberedAssumed {
 		return
 	}
 
-	$files = $fileInfos | % {$_.fullPath.Trim('"')}
+	$files = $fileInfos | ForEach-Object {$_.fullPath.Trim('"')}
 	git update-index --assume-unchanged @($files)
 }
 
@@ -26,9 +26,9 @@ $global:assumedFiles = @()
 # Displays all currently git assumed files with indexes to be used by Git-NumberedUnassumed
 ##############################################################################
 function Git-ListAssumed {
-	$files = (git ls-files -v) | Where-Object { $_.StartsWith("h") } | % { $_.Substring(2) }
+	$files = (git ls-files -v) | Where-Object { $_.StartsWith("h") } | ForEach-Object { $_.Substring(2) }
 	$index = 0
-	$files | % {
+	$files | ForEach-Object {
 		Write-Host "$index $_"
 		$global:assumedFiles += $_
 		$index++
@@ -66,7 +66,7 @@ function Git-NumberedHidden {
 		return
 	}
 
-	$files = $fileInfos | % {$_.fullPath.Trim('"')}
+	$files = $fileInfos | ForEach-Object {$_.fullPath.Trim('"')}
 	git update-index --skip-worktree @($files)
 }
 
@@ -81,9 +81,9 @@ $global:hiddenFiles = @()
 # Displays all currently git skip worktree files with indexes to be used by Git-NumberedHidden
 ##############################################################################
 function Git-ListHidden {
-	$files = (git ls-files -v) | Where-Object { $_.StartsWith("S") } | % { $_.Substring(2) }
+	$files = (git ls-files -v) | Where-Object { $_.StartsWith("S") } | ForEach-Object { $_.Substring(2) }
 	$index = 0
-	$files | % {
+	$files | ForEach-Object {
 		Write-Host "$index $_"
 		$global:hiddenFiles += $_
 		$index++

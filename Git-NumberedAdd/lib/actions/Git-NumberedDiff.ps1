@@ -3,7 +3,7 @@
 # `git diff` the indexes passed as $args in the working directory
 ##############################################################################
 function Git-NumberedDiff {
-	if ($args.length -eq 0 -or $args[0] -eq $null) {
+	if ($args.length -eq 0 -or $null -eq $args[0]) {
 		$args = @("0-$($global:gitStatusNumbers.workingDir.length - 1)")
 	}
 
@@ -14,13 +14,13 @@ function Git-NumberedDiff {
 
 	# git add -N, --intent-to-add
 	# so that new files are shown in the diff
-	$newFiles = $fileInfos | ? {$_.state -eq 'A'} | % {$_.fullPath.Trim('"')}
+	$newFiles = $fileInfos | Where-Object {$_.state -eq 'A'} | ForEach-Object {$_.fullPath.Trim('"')}
 	if ($newFiles) {
 		git add -Nv @($newFiles)
 	}
 
 	# Filter deleted files from diff (git doesn't like it)
-	$files = $fileInfos | ? {$_.state -ne 'D'} | % {$_.fullPath.Trim('"')}
+	$files = $fileInfos | Where-Object {$_.state -ne 'D'} | ForEach-Object {$_.fullPath.Trim('"')}
 	git diff @($files)
 }
 
@@ -30,7 +30,7 @@ function Git-NumberedDiff {
 # `git diff --cached` the indexes passed as $args in the working directory
 ##############################################################################
 function Git-NumberedDiffCached {
-	if ($args.length -eq 0 -or $args[0] -eq $null) {
+	if ($args.length -eq 0 -or $null -eq $args[0]) {
 		if ($global:gitStatusNumbers.stagingArea.length -eq 0) {
 			Write-Host "Staging area is empty."
 			return
@@ -43,6 +43,6 @@ function Git-NumberedDiffCached {
 		return
 	}
 
-	$files = $fileInfos | % {$_.fullPath.Trim('"')}
+	$files = $fileInfos | ForEach-Object {$_.fullPath.Trim('"')}
 	git diff --cached @($files)
 }

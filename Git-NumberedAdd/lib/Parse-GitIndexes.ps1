@@ -58,13 +58,13 @@ function Parse-GitIndexes($argIndexes, $lookIn = "workingDir") {
 		}
 	}
 
-	$return = $indexes | ? {
+	$return = $indexes | Where-Object {
 		if ($_ -ge $allFiles.length) {
 			Write-Host "$_ is outside of the boundaries of Git-NumberedStatus (Length: $($allFiles.length))" -ForegroundColor DarkMagenta
 			return $false
 		}
 		return $true
-	} | % { $allFiles[$_] }
+	} | ForEach-Object { $allFiles[$_] }
 
 	if ($commitMsg) {
 		if ($return -is [array]) {
@@ -87,7 +87,7 @@ function Validate-GitIndexes($indexes) {
 		return $false
 	}
 
-	if ($indexes.length -eq 0 -or $indexes[0] -eq $null) {
+	if ($indexes.length -eq 0 -or $null -eq $indexes[0]) {
 		Write-Host "No arguments? Usage:"
 		Write-Host "Add the first file: 'Git-NumberedAdd 0'"
 		Write-Host "Add the first 3 files: 'Git-NumberedAdd 0 1 2' or 'Git-NumberedAdd 0-2' or 'Git-NumberedAdd -3' or 'Git-NumberedAdd 012'"

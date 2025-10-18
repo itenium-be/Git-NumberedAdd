@@ -35,14 +35,14 @@ function Git-NumberedStatus() {
 	$allFiles = Parse-GitStatus $config.includeNumstat ($args -Join " ")
 
 	if ($config.includeNumstat) {
-		$maxAdded = ($allFiles | ? {$_.added -ne $null} | % {$_.added.ToString().Length} | Measure-Object -Maximum).Maximum + 1
-		$maxDeleted = ($allFiles | ? {$_.deleted -ne $null} | % {$_.deleted.ToString().Length} | Measure-Object -Maximum).Maximum + 1
+		$maxAdded = ($allFiles | Where-Object {$null -ne $_.added} | ForEach-Object {$_.added.ToString().Length} | Measure-Object -Maximum).Maximum + 1
+		$maxDeleted = ($allFiles | Where-Object {$null -ne $_.deleted} | ForEach-Object {$_.deleted.ToString().Length} | Measure-Object -Maximum).Maximum + 1
 	}
 
-	$config.stagingArea = $allFiles | Where staged
+	$config.stagingArea = $allFiles | Where-Object staged
 	if ($config.stagingArea.length) {
 		Write-Host "Staged files:"
-		$config.stagingArea | % {$index = -1}{
+		$config.stagingArea | ForEach-Object {$index = -1}{
 			$index++
 
 			$output = Get-FileInfoFormat $maxAdded $maxDeleted $_
@@ -52,10 +52,10 @@ function Git-NumberedStatus() {
 	}
 
 
-	$config.workingDir = @($allFiles | Where {$_.staged -eq $false})
+	$config.workingDir = @($allFiles | Where-Object {$_.staged -eq $false})
 	if ($config.workingDir.length) {
 		Write-Host "Working directory:"
-		$config.workingDir | % {$index = -1}{
+		$config.workingDir | ForEach-Object {$index = -1}{
 			$index++
 
 			$color = switch($_.state) {
@@ -89,8 +89,8 @@ function Get-FileInfoFormat($maxAdded, $maxDeleted, $fileInfo) {
 		$file = "$file ($($fileInfo.lineEndings))"
 	}
 
-	if ($maxAdded -ne $null) {
-		if ($fileInfo.added -ne $null) {
+	if ($null -ne $maxAdded) {
+		if ($null -ne $fileInfo.added) {
 			return "{0,3}  {1}  {2,$maxAdded} {3,$maxDeleted}  {4}" -f $index,$fileInfo.state,"+$($fileInfo.added)","-$($fileInfo.deleted)",$file
 		} else {
 			return "{0,3}  {1}  {2,$maxAdded} {3,$maxDeleted}  {4}" -f $index,$fileInfo.state,"","",$file

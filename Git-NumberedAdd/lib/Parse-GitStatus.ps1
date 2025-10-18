@@ -29,7 +29,7 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 
 	$allArgs = @('status', '-s')
 	if ($extraArgs) { $allArgs += $extraArgs }
-	$allFiles = Invoke-Git @allArgs | % {
+	$allFiles = Invoke-Git @allArgs | ForEach-Object {
 		$oldFilename = $null
 		$relativePath = $_.Substring(3).Replace("`"", "")
 
@@ -78,7 +78,7 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 		}
 		return $returns
 
-	} | % {$_}
+	} | ForEach-Object {$_}
 
 
 
@@ -113,8 +113,8 @@ function Add-GitNumstat($allFiles, $staged) {
 	}
 
 
-	$eolWarnings = $numstatResult | ? { $_ -is [System.Management.Automation.ErrorRecord] }
-	$eolWarnings | % {
+	$eolWarnings = $numstatResult | ForEach-Object { $_ -is [System.Management.Automation.ErrorRecord] }
+	$eolWarnings | ForEach-Object {
 		$line = $_.Exception.Message
 		if ($line.StartsWith('The file will have its original line')) {
 			# Ignore this one
@@ -127,7 +127,7 @@ function Add-GitNumstat($allFiles, $staged) {
 				$fromEol = $match.matches[0].groups['from']
 				$toEol = $match.matches[0].groups['to']
 				$fileName = $match.matches[0].groups['file'].Value.Replace('/', '\')
-				$matchingStatus = $allFiles | Where {$_.file -eq $fileName}
+				$matchingStatus = $allFiles | Where-Object {$_.file -eq $fileName}
 				if ($matchingStatus) {
 					$matchingStatus | Add-Member -NotePropertyName 'lineEndings' -NotePropertyValue "$fromEol -> $toEol" -Force
 				}
@@ -136,13 +136,13 @@ function Add-GitNumstat($allFiles, $staged) {
 	}
 
 
-	$numstatResult = $numstatResult | ? { $_ -isnot [System.Management.Automation.ErrorRecord] }
-	$numstatResult | % {
+	$numstatResult = $numstatResult | Where-Object { $_ -isnot [System.Management.Automation.ErrorRecord] }
+	$numstatResult | ForEach-Object {
 		# Output format: +++ `t --- `t fileName
 		$numstat = $_.Trim().Split("`t")
 		$file = Quote-Path $numstat[2]
 		$numstat = @{file=$file;added=$numstat[0];deleted=$numstat[1]}
-		$matchingStatus = $allFiles | Where {$_.staged -eq $staged -and $numstat.file -eq $_.file}
+		$matchingStatus = $allFiles | Where-Object {$_.staged -eq $staged -and $numstat.file -eq $_.file}
 
 		if ($matchingStatus) {
 			$matchingStatus.added = $numstat.added
