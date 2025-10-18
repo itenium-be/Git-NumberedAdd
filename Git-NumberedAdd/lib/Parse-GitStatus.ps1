@@ -30,6 +30,7 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 	$allArgs = @('status', '-s')
 	if ($extraArgs) { $allArgs += $extraArgs }
 	$allFiles = Invoke-Git @allArgs | % {
+		$oldFilename = $null
 		$relativePath = $_.Substring(3).Replace("`"", "")
 
 		if ($relativePath -match " -> ") {

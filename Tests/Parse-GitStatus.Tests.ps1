@@ -24,6 +24,25 @@ Describe 'Parse-GitStatus' {
 		$result[1].staged | Should -Be $false
 	}
 
+	It 'Resets file rename for next file' {
+		Mock Invoke-Git {
+			"R  TestDrive:\file0 -> TestDrive:\spacey file2"
+			"M  TestDrive:\file1"
+		}
+		$result = Parse-GitStatus
+
+		$result.Length | Should -Be 2
+		$result[0].file | Should -Be "`"TestDrive:\spacey file2`""
+		$result[0].state | Should -Be "R"
+		$result[0].oldFile | Should -Be "TestDrive:\file0"
+		$result[0].staged | Should -Be $true
+
+		$result[1].file | Should -Be "TestDrive:\file1"
+		$result[1].state | Should -Be "M"
+		$result[1].oldFile | Should -Be $null
+		$result[1].staged | Should -Be $true
+	}
+
 	It 'Add quotes around filename with spaces if it is not yet the case' {
 		Mock Invoke-Git { "?? TestDrive:\spacey file2" }
 		$result = Parse-GitStatus
