@@ -19,8 +19,13 @@ function Parse-GitStatus($includeNumstat = $false, $extraArgs) {
 	$hasStaged = $false
 	$hasWorkingDir = $false
 
-	$workingDir = Get-Location
 	$gitRootdir = Get-GitRootLocation
+	$workingDirRelative = git rev-parse --show-prefix
+	if ($workingDirRelative) {
+		$workingDir = Join-Path $gitRootdir $workingDirRelative
+	} else {
+		$workingDir = $gitRootdir
+	}
 	# write-host "workingDir=$workingDir"
 	# write-host "gitRootdir=$gitRootdir"
 
