@@ -138,9 +138,18 @@ Git-NumberedUnhidden # alias: gunhide
 
 [Generate ApiKey](https://www.powershellgallery.com/account/apikeys)
 
+Update version number 2x in `Git-NumberedAdd.psd1`:
+- `ModuleVersion = '1.0'`
+- `PrivateData.PSData.ReleaseNotes`
+
 ```powershell
+git tag v1.0
+git push --tags
+
 Publish-Module -Path .\Git-NumberedAdd -NuGetApiKey key
 ```
+
+[Create a release](https://github.com/itenium-be/Git-NumberedAdd/releases/new) for the tag.
 
 
 ## Random Repository
