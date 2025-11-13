@@ -12,6 +12,9 @@ See [the itenium blog for a more detailed explanation](https://itenium.be/blog/p
 Install-Module -Name Git-NumberedAdd
 ```
 
+This will install the module in `$env:PSModulePath -split ';'`
+
+
 ### Local
 
 ```ps1
