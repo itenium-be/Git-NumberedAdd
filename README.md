@@ -1,5 +1,8 @@
 # Git-NumberedAdd
 
+[![CI](https://github.com/itenium-be/Git-NumberedAdd/actions/workflows/main.yml/badge.svg)](https://github.com/itenium-be/Git-NumberedAdd/actions/workflows/main.yml)
+[![PowerShell Gallery](https://img.shields.io/powershellgallery/v/Git-NumberedAdd)](https://www.powershellgallery.com/packages/Git-NumberedAdd)
+
 PowerShell script to git add, diff, reset, etc files with fabricated indexes.
 
 See [the itenium blog for a more detailed explanation](https://itenium.be/blog/productivity/git-numbered-add-for-powershell).
