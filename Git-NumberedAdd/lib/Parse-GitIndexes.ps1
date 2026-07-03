@@ -11,19 +11,9 @@ function Parse-GitIndexes($argIndexes, $lookIn = "workingDir") {
 		$allFiles = @($allFiles)
 	}
 
-	if ([string]$argIndexes -match '^([0-9]+)(?: (\D+))?$' `
-		-and ($Matches[0].Length -gt 1) `
-		-and ($allFiles.length -lt 11 -or [int]$Matches[0] -ge $allFiles.length)
-	) {
-		# Add by many 1 digit indexes (ex: 035 == 0, 3 and 5)
-		$argIndexes = $Matches[1].ToCharArray()
-		$commitMsg = $Matches[2]
-	}
-
 	$indexes = @()
 	for ($counter = 0; $counter -lt $argIndexes.Length; $counter++) {
 		$arg = $argIndexes[$counter]
-		$index = $null; # Initialization for [ref] usage below (CI complains otherwise)
 
 		if ($arg -match '^\d+-\d+$') {
 			# Add by range (ex: 3-5)
@@ -45,9 +35,20 @@ function Parse-GitIndexes($argIndexes, $lookIn = "workingDir") {
 				$indexes += ($beginOrStart + 1)..($allFiles.length - 1)
 			}
 
-		} elseif ([int32]::TryParse($arg, [ref]$index)) {
-			# Add by index (ex: 3, 15)
-			$indexes += $index
+		} elseif ([string]$arg -match '^\d+$') {
+			# A single index (ex: 3, 15) or many 1 digit indexes (ex: 035 == 0, 3 and 5)
+			$token = [string]$arg
+			$splitIntoDigits = ($token.Length -gt 1) -and (
+				$token[0] -eq '0' -or             # Leading zero is an explicit "split me" (ex: 017 == 0, 1, 7)
+				$allFiles.length -lt 11 -or       # <11 files means single digit indexes, so a multi digit token is multiple indexes
+				[int]$token -ge $allFiles.length  # Out of bounds as a single index, so it must be multiple indexes
+			)
+
+			if ($splitIntoDigits) {
+				$indexes += $token.ToCharArray() | % { [int][string]$_ }
+			} else {
+				$indexes += [int]$token
+			}
 
 		} elseif ($argIndexes.Length -gt 1 -and $argIndexes.Length -eq $counter + 1) {
 			# Last argument: commit message

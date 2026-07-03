@@ -84,4 +84,32 @@ Describe 'Parse-GitIndexes - tests with specific stagingArea/workingDir' {
 		$fileInfos = Parse-GitIndexes @("012")
 		$fileInfos.Length | Should -Be 3
 	}
+
+	Context 'with 18 files (more than 10)' {
+		BeforeEach {
+			$global:gitStatusNumbers.stagingArea = @()
+			$global:gitStatusNumbers.workingDir = 0..17 | % { @{state="M";file="file$_";staged=$false} }
+		}
+
+		It 'Splits a leading-zero token even when the number is a valid index (017 == 0, 1, 7)' {
+			$fileInfos = Parse-GitIndexes @("017")
+			$fileInfos.Length | Should -Be 3
+			$fileInfos[0].file | Should -Be 'file0'
+			$fileInfos[1].file | Should -Be 'file1'
+			$fileInfos[2].file | Should -Be 'file7'
+		}
+
+		It 'Keeps an in-range two-digit token without leading zero as a single index (15 == index 15)' {
+			$fileInfos = Parse-GitIndexes @("15")
+			$fileInfos.Length | Should -Be 1
+			$fileInfos.file | Should -Be 'file15'
+		}
+
+		It 'Splits an out-of-range two-digit token into single digits (19 == 1, 9)' {
+			$fileInfos = Parse-GitIndexes @("19")
+			$fileInfos.Length | Should -Be 2
+			$fileInfos[0].file | Should -Be 'file1'
+			$fileInfos[1].file | Should -Be 'file9'
+		}
+	}
 }

@@ -128,6 +128,15 @@ Describe 'Parse-GitIndexes' {
 		$fileInfos[0].file | Should -Be 'file0'
 		$fileInfos[1].file | Should -Be 'file1'
 	}
+
+	It 'Parses concatenated indexes split across multiple arguments' {
+		$fileInfos = Parse-GitIndexes "012",3
+		$fileInfos.Length | Should -Be 4
+		$fileInfos[0].file | Should -Be 'file0'
+		$fileInfos[1].file | Should -Be 'file1'
+		$fileInfos[2].file | Should -Be 'file2'
+		$fileInfos[3].file | Should -Be 'file3'
+	}
 }
 
 
