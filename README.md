@@ -92,9 +92,9 @@ Git-NumberedAssumed # alias: gas
 # Stage files 0, 1 and 3
 Git-NumberedAdd 0 1 3
 
-# The spaces are optional, but only when there
-# are less than 10 files in the status report.
+# Concatenate 1 digit indexes: the spaces are optional.
 Git-NumberedDiff 013
+Git-NumberedDiff 01 3
 
 # Checkout files 2 to 5 (all inclusive)
 Git-NumberedCheckout 2-5
