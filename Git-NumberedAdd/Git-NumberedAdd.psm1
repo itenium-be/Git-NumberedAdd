@@ -58,6 +58,11 @@ Set-Alias gunhide Git-NumberedUnhidden
 # Displays help for all Git-Numbered actions and utilities
 ##############################################################################
 function Git-NumberedHelp() {
+	$module = $ExecutionContext.SessionState.Module
+	$title = "Git-NumberedAdd v$($module.Version)"
+	Write-Host "$title`n$('=' * $title.Length)" -ForegroundColor Yellow
+	Write-Host "Loaded from: $($module.ModuleBase)"
+
 	$table = Get-Command -Name "Git-*" | ? { $_.CommandType -eq 'Function' } | % {
 		$name = $_.name
 		$help = get-help $_ -Full
